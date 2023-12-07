@@ -9,7 +9,8 @@
             //EvenOddNumber(); //Задание 1
             //TwentyOneGame(); //Задание 2
             //PrimeNumber(); //Задание 3
-            FindMinimumInput();
+            //FindMinimumInput(); //Задание 4
+            GuessNumber(); //Задание 5
         }
 
         internal static void EvenOddNumber() {
@@ -58,6 +59,26 @@
                 minimum = number < minimum ? number : minimum;
             }
             Console.WriteLine($"Минимальное число в введенной последовательности = {minimum}");
+        }
+
+        internal static void GuessNumber() {
+            Console.WriteLine("Ввод максимального числа:");
+            int max = GetNumber(1, int.MaxValue - 1);
+            Random rnd = new Random();
+            int number = rnd.Next(0, max + 1);
+            int guessNumber = -1;
+            int i = 1;
+            do {
+                Console.WriteLine($"Попытка №{i++}");
+                guessNumber = GetNumber(0, max);
+                if (guessNumber < number) {
+                    Console.WriteLine("Введенное число меньше, чем нужно");
+                }
+                if (number < guessNumber) {
+                    Console.WriteLine("Введенное число больше, чем нужно");
+                }
+            } while (guessNumber != number);
+            Console.WriteLine($"Введенное число {guessNumber} равно сгенерированному числу {number}. Вы выиграли!!!");
         }
 
 
