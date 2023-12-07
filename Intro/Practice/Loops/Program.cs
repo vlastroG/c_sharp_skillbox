@@ -7,7 +7,8 @@
 
         internal static void Main() {
             //EvenOddNumber(); //Задание 1
-            TwentyOneGame(); //Задание 2
+            //TwentyOneGame(); //Задание 2
+            PrimeNumber(); //Задание 3
         }
 
         internal static void EvenOddNumber() {
@@ -29,6 +30,22 @@
             }
             Console.WriteLine($"Ваш итоговый счет: {score}");
             Console.ReadKey();
+        }
+
+        internal static void PrimeNumber() {
+            int number = GetNumber(1, int.MaxValue);
+            int dividersCount = 0;
+            int halfNumber = number / 2;
+            for (int i = 1; i <= halfNumber; i++) {
+                if ((number % i) == 0) {
+                    dividersCount++;
+                    if (dividersCount > 2) {
+                        break;
+                    }
+                }
+            }
+            string message = dividersCount <= 2 ? "Число простое" : "Число не простое";
+            Console.WriteLine(message);
         }
 
 
