@@ -8,7 +8,8 @@
         internal static void Main() {
             //EvenOddNumber(); //Задание 1
             //TwentyOneGame(); //Задание 2
-            PrimeNumber(); //Задание 3
+            //PrimeNumber(); //Задание 3
+            FindMinimumInput();
         }
 
         internal static void EvenOddNumber() {
@@ -48,6 +49,17 @@
             Console.WriteLine(message);
         }
 
+        internal static void FindMinimumInput() {
+            int numbersCount = GetNumber(1, int.MaxValue);
+            int minimum = int.MaxValue;
+            for (int i = 0; i < numbersCount; i++) {
+                Console.WriteLine($"Ввод {i + 1}-го числа:");
+                int number = GetNumber(int.MinValue, int.MaxValue);
+                minimum = number < minimum ? number : minimum;
+            }
+            Console.WriteLine($"Минимальное число в введенной последовательности = {minimum}");
+        }
+
 
         /// <summary>
         /// Возвращает целое число, введенное пользователем в заданном диапазоне, включая минимум и максимум
@@ -58,14 +70,25 @@
         private static int GetNumber(int min, int max) {
             string message = $"Введите целое число в диапазоне от {min} до {max} включительно:";
             string str;
-            int count = -1;
-            while (count < min || max < count) {
+            bool askForNumber = true;
+            int number = 0;
+            while (askForNumber) {
                 Console.WriteLine(message);
                 str = Console.ReadLine() ?? string.Empty;
-                int.TryParse(str, out int number);
-                count = number;
+                try {
+                    number = int.Parse(str);
+                    if (min <= number && number <= max) {
+                        askForNumber = false;
+                    }
+                } catch (ArgumentNullException) {
+                    continue;
+                } catch (FormatException) {
+                    continue;
+                } catch (OverflowException) {
+                    continue;
+                }
             }
-            return count;
+            return number;
         }
 
         private static int GetCard(int cardNumber) {
