@@ -69,17 +69,25 @@
             int guessNumber = -1;
             int i = 1;
             do {
-                Console.WriteLine($"Попытка №{i++}");
-                guessNumber = GetNumber(0, max);
-                if (guessNumber < number) {
-                    Console.WriteLine("Введенное число меньше, чем нужно");
-                }
-                if (number < guessNumber) {
-                    Console.WriteLine("Введенное число больше, чем нужно");
+                try {
+                    Console.WriteLine($"Попытка №{i++}");
+                    guessNumber = GetNumber(0, max, "q");
+                    if (guessNumber < number) {
+                        Console.WriteLine("Введенное число меньше, чем нужно");
+                    }
+                    if (number < guessNumber) {
+                        Console.WriteLine("Введенное число больше, чем нужно");
+                    }
+                } catch (OperationCanceledException) {
+                    break;
                 }
             } while (guessNumber != number);
-            Console.WriteLine($"Введенное число {guessNumber} равно сгенерированному числу {number}. Вы выиграли!!!");
+
+            if (guessNumber == number) {
+                Console.WriteLine($"Введенное число {guessNumber} равно сгенерированному числу {number}. Вы выиграли!!!");
+            }
         }
+
 
 
         /// <summary>
@@ -88,14 +96,25 @@
         /// <param name="min">Минимум</param>
         /// <param name="max">Максимум</param>
         /// <returns></returns>
-        private static int GetNumber(int min, int max) {
-            string message = $"Введите целое число в диапазоне от {min} до {max} включительно:";
+        private static int GetNumber(int min, int max, string? cancellationString = null) {
+            string message;
+            bool doCancell;
+            if (!string.IsNullOrWhiteSpace(cancellationString)) {
+                doCancell = true;
+                message = $"Введите целое число в диапазоне от {min} до {max} включительно. Для отмены введите \'{cancellationString}\'";
+            } else {
+                doCancell = false;
+                message = $"Введите целое число в диапазоне от {min} до {max} включительно:";
+            }
             string str;
             bool askForNumber = true;
             int number = 0;
             while (askForNumber) {
                 Console.WriteLine(message);
                 str = Console.ReadLine() ?? string.Empty;
+                if (doCancell && str == cancellationString) {
+                    throw new OperationCanceledException();
+                }
                 try {
                     number = int.Parse(str);
                     if (min <= number && number <= max) {
