@@ -5,7 +5,9 @@ VisualStudioVersion = 17.8.34316.72
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HelloWorld", "HelloWorld\HelloWorld.csproj", "{FFB9D8EB-C114-47B6-AF13-4E04C92644DA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InputOutput", "InputOutput\InputOutput.csproj", "{0776377E-7932-4DA8-8B5D-36907A94BDD0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InputOutput", "InputOutput\InputOutput.csproj", "{0776377E-7932-4DA8-8B5D-36907A94BDD0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Loops", "Loops\Loops.csproj", "{D6FEBDAD-E176-4950-ABE8-67BE2502BE6C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{0776377E-7932-4DA8-8B5D-36907A94BDD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0776377E-7932-4DA8-8B5D-36907A94BDD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0776377E-7932-4DA8-8B5D-36907A94BDD0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6FEBDAD-E176-4950-ABE8-67BE2502BE6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6FEBDAD-E176-4950-ABE8-67BE2502BE6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6FEBDAD-E176-4950-ABE8-67BE2502BE6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6FEBDAD-E176-4950-ABE8-67BE2502BE6C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
