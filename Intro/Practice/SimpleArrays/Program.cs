@@ -1,9 +1,45 @@
 ﻿namespace SimpleArrays {
     internal class Program {
         internal static void Main() {
-            RandomMatrix(); //Задание 1
+            //RandomMatrix(); //Задание 1
+            SumOfRundomMatrix(); //Задание 2
         }
 
+
+        private static void SumOfRundomMatrix() {
+            int minSize = 1;
+            int maxSize = 20;
+            int x = GetNumber($"Введите ширину матриц от {minSize} до {maxSize}", minSize, maxSize);
+            int y = GetNumber($"Введите высоту матриц от {minSize} до {maxSize}", minSize, maxSize);
+
+            Console.WriteLine("Матрица 1:");
+            int[,] matrix1 = GetMatrix(y, x);
+            DrawMatrix(matrix1);
+
+            Console.WriteLine("\nМатрица 2:");
+            int[,] matrix2 = GetMatrix(y, x);
+            DrawMatrix(matrix2);
+
+            Console.WriteLine("\nСуммарная матрица:");
+            long[,] sumMatrix = SumMatrix(matrix1, matrix2);
+            DrawMatrix(sumMatrix);
+        }
+
+        private static long[,] SumMatrix(int[,] matrix1, int[,] matrix2) {
+            if (matrix1.GetLength(0) != matrix2.GetLength(0)
+                || matrix1.GetLength(1) != matrix2.GetLength(1)) {
+                throw new ArgumentException("Размер матриц должны быть одинаковые!");
+            }
+            int x = matrix1.GetLength(0);
+            int y = matrix1.GetLength(1);
+            long[,] result = new long[x, y];
+            for (int i = 0; i < x; i++) {
+                for (int j = 0; j < y; j++) {
+                    result[i, j] = (long)matrix1[i, j] + (long)matrix2[i, j];
+                }
+            }
+            return result;
+        }
 
         private static void RandomMatrix() {
             int minSize = 1;
@@ -13,6 +49,15 @@
             var matrix = GetMatrix(y, x);
             DrawMatrix(matrix);
             Console.WriteLine($"Сумма чисел в матрице = {GetSum(matrix)}");
+        }
+
+        private static void DrawMatrix(long[,] matrix) {
+            for (int i = 0; i < matrix.GetLength(0); i++) {
+                for (int j = 0; j < matrix.GetLength(1); j++) {
+                    Console.Write($"{matrix[i, j],-12}");
+                }
+                Console.WriteLine();
+            }
         }
 
         private static void DrawMatrix(int[,] matrix) {
