@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Loops", "Loops\Loops.csproj
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleArrays", "SimpleArrays\SimpleArrays.csproj", "{D17B73A9-95F9-45CF-9C3E-B2DF2051A026}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleMethods", "SimpleMethods\SimpleMethods.csproj", "{BBBB61DF-6D02-437E-A791-3ECB1AAB6AC7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleMethods", "SimpleMethods\SimpleMethods.csproj", "{BBBB61DF-6D02-437E-A791-3ECB1AAB6AC7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Employees", "Employees\Employees.csproj", "{F96370C2-4A3C-448F-9AD5-727B362FFD77}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{BBBB61DF-6D02-437E-A791-3ECB1AAB6AC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BBBB61DF-6D02-437E-A791-3ECB1AAB6AC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BBBB61DF-6D02-437E-A791-3ECB1AAB6AC7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F96370C2-4A3C-448F-9AD5-727B362FFD77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F96370C2-4A3C-448F-9AD5-727B362FFD77}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F96370C2-4A3C-448F-9AD5-727B362FFD77}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F96370C2-4A3C-448F-9AD5-727B362FFD77}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
