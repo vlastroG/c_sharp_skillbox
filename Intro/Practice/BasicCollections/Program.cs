@@ -2,7 +2,8 @@
     internal class Program {
         internal static void Main() {
             //ListSample(); // Задание 1
-            PhoneBook(); // Задание 2
+            //PhoneBook(); // Задание 2
+            CheckDuplicates(); // Задание 3
         }
 
 
@@ -77,6 +78,41 @@
                     throw new OperationCanceledException();
                 }
             } while (string.IsNullOrWhiteSpace(result));
+            return result;
+        }
+
+        private static void CheckDuplicates() {
+            try {
+                HashSet<int> numbers = new HashSet<int>();
+                int number;
+                while (true) {
+                    number = GetIntFromUser($"Введите число в диапазоне [{int.MinValue}; {int.MaxValue}]:");
+                    if (!numbers.Add(number)) {
+                        Console.WriteLine("Такое число уже вводилось, введите другое!");
+                    }
+                }
+            } catch (OperationCanceledException) {
+            }
+        }
+
+        private static string GetStringFromUser(string msg) {
+            Console.WriteLine($"{msg} (для выхода введите 'q')");
+            string? result;
+            do {
+                result = Console.ReadLine() ?? string.Empty;
+                if (result == "q") {
+                    throw new OperationCanceledException();
+                }
+            } while (string.IsNullOrWhiteSpace(result));
+            return result;
+        }
+
+        private static int GetIntFromUser(string msg) {
+            int result;
+            bool success;
+            do {
+                success = int.TryParse(GetStringFromUser(msg), out result);
+            } while (!success);
             return result;
         }
     }
