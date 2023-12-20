@@ -32,7 +32,7 @@ namespace Workers.Repositories {
                     int i = 0;
                     while ((line = reader.ReadLine()) != null) {
                         try {
-                            if (workers.Length < i) {
+                            if (workers.Length <= i) {
                                 Array.Resize(ref workers, workers.Length * 2);
                             }
                             workers[i++] = Worker.ConvertFromString(line);
