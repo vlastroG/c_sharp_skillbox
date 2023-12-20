@@ -1,9 +1,12 @@
-﻿namespace BasicCollections {
+﻿using System.Xml.Linq;
+
+namespace BasicCollections {
     internal class Program {
         internal static void Main() {
             //ListSample(); // Задание 1
             //PhoneBook(); // Задание 2
-            CheckDuplicates(); // Задание 3
+            //CheckDuplicates(); // Задание 3
+            CreateAndSavePerson(); //Задание 4
         }
 
 
@@ -114,6 +117,49 @@
                 success = int.TryParse(GetStringFromUser(msg), out result);
             } while (!success);
             return result;
+        }
+
+        private static XElement CreatePerson() {
+            XElement xPerson = new XElement("Person");
+            xPerson.SetAttributeValue("name", GetStringFromUser("Введите ФИО человека:"));
+
+            XElement xStreet = new XElement("Street", GetStringFromUser("Введите название улицы:"));
+            XElement xHouseNumber = new XElement("HouseNumber", GetStringFromUser("Введите номер дома:"));
+            XElement xFlatNumber = new XElement("FlatNumber", GetStringFromUser("Введите номер квартиры:"));
+            XElement xAddress = new XElement("Address",
+                xStreet,
+                xHouseNumber,
+                xFlatNumber
+                );
+            xPerson.Add(xAddress);
+
+            XElement xMobilePhone = new XElement("MobilePhone", GetStringFromUser("Введите номер мобильного телефона:"));
+            XElement xFlatPhone = new XElement("FlatPhone", GetStringFromUser("Введите номер домашнего телефона:"));
+            XElement xPhones = new XElement("Phones",
+                xMobilePhone,
+                xFlatPhone
+                );
+            xPerson.Add(xPhones);
+
+            return xPerson;
+        }
+
+        private static void SerializePerson(XElement person) {
+            using (Stream stream = new FileStream("./person.xml", FileMode.Create, FileAccess.Write)) {
+                person.Save(stream);
+                stream.Close();
+            }
+        }
+
+        private static void CreateAndSavePerson() {
+            try {
+                XElement person = CreatePerson();
+                SerializePerson(person);
+                Console.WriteLine("Данные успешно сохранены.");
+            } catch (OperationCanceledException) {
+            }
+            Console.WriteLine("Для выхода из программы нажмите Enter:");
+            Console.ReadLine();
         }
     }
 }
