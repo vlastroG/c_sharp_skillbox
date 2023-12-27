@@ -69,8 +69,26 @@ namespace BankSystem.ViewModels {
 
 
         public Client GetUpdatedClient() {
-            if (_consultant.GetClientPhone(_client) != Phone) {
-                _consultant.SetClientPhone(_client, Phone);
+            if (_consultant is Manager manager) {
+                if (manager.GetClientName(_client) != Name) {
+                    manager.SetClientName(_client, Name);
+                }
+                if (manager.GetClientSurname(_client) != Surname) {
+                    manager.SetClientSurname(_client, Surname);
+                }
+                if (manager.GetClientPatronymic(_client) != Patronymic) {
+                    manager.SetClientPatronymic(_client, Patronymic);
+                }
+                if (manager.GetClientPhone(_client) != Phone) {
+                    manager.SetClientPhone(_client, Phone);
+                }
+                if (manager.GetClientPassport(_client) != Passport) {
+                    manager.SetClientPassport(_client, Passport);
+                }
+            } else if (_consultant is Consultant consultant) {
+                if (consultant.GetClientPhone(_client) != Phone) {
+                    consultant.SetClientPhone(_client, Phone);
+                }
             }
             return _client;
         }

@@ -13,17 +13,17 @@ namespace BankSystem.Entities {
         }
 
 
-        public string GetClientSurname(Client client) { return client.GetSurname(_login, _password); }
+        public virtual string GetClientSurname(Client client) { return client.GetSurname(_login, _password); }
 
-        public string GetClientName(Client client) { return client.GetName(_login, _password); }
+        public virtual string GetClientName(Client client) { return client.GetName(_login, _password); }
 
-        public string GetClientPatronymic(Client client) { return client.GetPatronymic(_login, _password); }
+        public virtual string GetClientPatronymic(Client client) { return client.GetPatronymic(_login, _password); }
 
-        public string GetClientPassport(Client client) { return client.GetPassport(_login, _password); }
+        public virtual string GetClientPassport(Client client) { return client.GetPassport(_login, _password); }
 
-        public string GetClientPhone(Client client) { return client.GetPhone(_login, _password); }
+        public virtual string GetClientPhone(Client client) { return client.GetPhone(_login, _password); }
 
-        public Client SetClientPhone(Client client, string phone) {
+        public virtual Client SetClientPhone(Client client, string phone) {
             client.SetPhone(_login, _password, phone);
             return client;
         }

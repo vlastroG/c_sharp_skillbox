@@ -3,38 +3,30 @@ using BankSystem.Entities;
 using BankSystem.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Windows.Input;
 using vlastroG.WPF.Commands;
 using vlastroG.WPF.ViewModels;
 
 namespace BankSystem.ViewModels {
-    internal class MainWindowViewModel : BaseViewModel {
-        private readonly ClientsRepository _clientsRepository;
-
-        private readonly Consultant _consultant;
+    internal abstract class ClientsEditorViewModel : BaseViewModel {
+        private protected readonly ClientsRepository _clientsRepository;
 
 
-        public MainWindowViewModel(ClientsDbContext context) {
+        protected ClientsEditorViewModel(ClientsDbContext context) {
             context.Database.Migrate();
             _clientsRepository = new ClientsRepository(context);
-            _consultant = new Consultant();
             _errorText = string.Empty;
             FillTestData();
-            Clients = new ObservableCollection<ClientViewModel>(
-                _clientsRepository.Items.Select(item => new ClientViewModel(item, _consultant)));
-            foreach (var client in Clients) {
-                client.PropertyChanged += UpdateErrorText;
-            }
-            Title = "Пользователь: консультант";
             OkCommand = new LambdaCommand(UpdateData, CanUpdateData);
+            Clients = new ObservableCollection<ClientViewModel>();
+            Title = "Редактор клиентов";
         }
 
 
         public ObservableCollection<ClientViewModel> Clients { get; }
 
 
-        public string Title { get; }
+        public string Title { get; private protected set; }
 
 
         private string _errorText;
@@ -60,12 +52,6 @@ namespace BankSystem.ViewModels {
                 _clientsRepository.Add(new Client("Сидоров", "Анатолий", "Анатольевич", "3333333333"));
                 _clientsRepository.Add(new Client("Петренко", "Станислав", "Владимирович", "4444444444"));
                 _clientsRepository.Add(new Client("Сергеев", "Сергей", "Сергеевич", "5555555555"));
-            }
-        }
-
-        private void UpdateErrorText(object? sender, PropertyChangedEventArgs e) {
-            if (sender is ClientViewModel) {
-                ErrorText = Clients.FirstOrDefault(client => !string.IsNullOrWhiteSpace(client.Error))?.Error ?? string.Empty;
             }
         }
     }

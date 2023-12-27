@@ -1,20 +1,23 @@
-﻿using BankSystem.Context;
-using BankSystem.ViewModels;
-using System.Windows;
+﻿using System.Windows;
 
 namespace BankSystem.Views {
     public partial class MainWindow : Window {
         public MainWindow() {
-            DataContext = new MainWindowViewModel(new ClientsDbContext());
             InitializeComponent();
         }
 
-        private void ButtonOkClick(object sender, RoutedEventArgs e) {
-            Close();
+        private void ManagerClick(object sender, RoutedEventArgs e) {
+            Hide();
+            var window = new ManagerWindow() { Owner = this };
+            window.ShowDialog();
+            Visibility = Visibility.Visible;
         }
 
-        private void ButtonCancelClick(object sender, RoutedEventArgs e) {
-            Close();
+        private void ConsultantClick(object sender, RoutedEventArgs e) {
+            Hide();
+            var window = new ConsultantWindow() { Owner = this };
+            window.ShowDialog();
+            Visibility = Visibility.Visible;
         }
     }
 }
