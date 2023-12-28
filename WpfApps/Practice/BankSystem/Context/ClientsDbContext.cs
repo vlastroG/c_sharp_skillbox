@@ -16,6 +16,10 @@ namespace BankSystem.Context {
             modelBuilder.Entity<Client>().Property("_patronymic");
             modelBuilder.Entity<Client>().Property("_passport");
             modelBuilder.Entity<Client>().Property("_phone");
+            modelBuilder.Entity<Client>().Property("_lastChangeTime");
+            modelBuilder.Entity<Client>().Property("_lastChangeData");
+            modelBuilder.Entity<Client>().Property("_lastChangeDescription");
+            modelBuilder.Entity<Client>().Property("_lastChangeBy");
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 
 namespace BankSystem.Entities {
-    internal class Consultant {
+    internal class Consultant : IConsultant {
         private readonly string _login;
         private readonly string _password;
 

@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 
 namespace BankSystem.Entities {
-    internal class Manager : Consultant {
+    internal class Manager : Consultant, IManager {
         private readonly string _login;
         private readonly string _password;
 
@@ -56,6 +56,10 @@ namespace BankSystem.Entities {
         public Client SetClientPassport(Client client, string passport) {
             client.SetPassport(_login, _password, passport);
             return client;
+        }
+
+        public Client CreateNewClient(string surname, string name, string patronymic, string passport) {
+            return new Client(surname, name, patronymic, passport);
         }
     }
 }

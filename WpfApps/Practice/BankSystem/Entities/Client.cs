@@ -16,6 +16,14 @@ namespace BankSystem.Entities {
 
         private string _passport;
 
+        private DateTime _lastChangeTime;
+
+        private string _lastChangeData;
+
+        private string _lastChangeDescription;
+
+        private string _lastChangeBy;
+
 
         public Client(string surname, string name, string patronymic, string passport) {
             if (string.IsNullOrWhiteSpace(surname)) {
@@ -39,6 +47,11 @@ namespace BankSystem.Entities {
             _patronymic = patronymic;
             _passport = passport;
             _phone = string.Empty;
+
+            _lastChangeTime = DateTime.Now;
+            _lastChangeData = "Создана запись";
+            _lastChangeDescription = string.Empty;
+            _lastChangeBy = string.Empty;
         }
 
         public Client() : this("default", "default", "default", "default") { }
@@ -56,6 +69,11 @@ namespace BankSystem.Entities {
 
         public void SetPassport(string login, string password, string passport) {
             if (IsManager(login, password) && !string.IsNullOrWhiteSpace(passport)) {
+                _lastChangeTime = DateTime.Now;
+                _lastChangeData = nameof(_passport);
+                _lastChangeDescription = $"{_passport} => {passport}";
+                _lastChangeBy = nameof(Manager);
+
                 _passport = passport;
             }
         }
@@ -70,6 +88,11 @@ namespace BankSystem.Entities {
 
         public void SetSurname(string login, string password, string surname) {
             if (IsManager(login, password) && !string.IsNullOrWhiteSpace(surname)) {
+                _lastChangeTime = DateTime.Now;
+                _lastChangeData = nameof(_surname);
+                _lastChangeDescription = $"{_surname} => {surname}";
+                _lastChangeBy = nameof(Manager);
+
                 _surname = surname;
             }
         }
@@ -84,6 +107,11 @@ namespace BankSystem.Entities {
 
         public void SetName(string login, string password, string name) {
             if (IsManager(login, password) && !string.IsNullOrWhiteSpace(name)) {
+                _lastChangeTime = DateTime.Now;
+                _lastChangeData = nameof(_name);
+                _lastChangeDescription = $"{_name} => {name}";
+                _lastChangeBy = nameof(Manager);
+
                 _name = name;
             }
         }
@@ -98,6 +126,11 @@ namespace BankSystem.Entities {
 
         public void SetPatronymic(string login, string password, string patronymic) {
             if (IsManager(login, password) && !string.IsNullOrWhiteSpace(patronymic)) {
+                _lastChangeTime = DateTime.Now;
+                _lastChangeData = nameof(_patronymic);
+                _lastChangeDescription = $"{_patronymic} => {patronymic}";
+                _lastChangeBy = nameof(Manager);
+
                 _patronymic = patronymic;
             }
         }
@@ -112,6 +145,12 @@ namespace BankSystem.Entities {
 
         public void SetPhone(string login, string password, string newPhone) {
             if ((IsConsultant(login, password) || IsManager(login, password)) && !string.IsNullOrWhiteSpace(newPhone)) {
+                _lastChangeTime = DateTime.Now;
+                _lastChangeData = nameof(_phone);
+                _lastChangeDescription = $"{_phone} => {newPhone}";
+
+                _lastChangeBy = IsManager(login, password) ? nameof(Manager) : nameof(Consultant);
+
                 _phone = newPhone;
             }
         }
