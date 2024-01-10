@@ -21,7 +21,7 @@ namespace BankSystem.Repositories {
         public TEntity Add(TEntity entity) {
             if (entity == null) { throw new ArgumentNullException(nameof(entity)); }
             _clientsDbContext.Entry(entity).State = EntityState.Added;
-            _clientsDbContext.SaveChangesAsync();
+            _clientsDbContext.SaveChanges();
             return entity;
         }
 
@@ -29,6 +29,14 @@ namespace BankSystem.Repositories {
             if (entity is null) { throw new ArgumentNullException(nameof(entity)); }
             _clientsDbContext.Entry(entity).State = EntityState.Modified;
             _clientsDbContext.SaveChanges();
+        }
+
+        public void Remove(int id) {
+            var item = _dbSet.FirstOrDefault(i => i.Id == id);
+            if (item != null) {
+                _clientsDbContext.Remove(item);
+                _clientsDbContext.SaveChanges();
+            }
         }
     }
 }
