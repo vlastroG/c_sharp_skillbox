@@ -22,10 +22,16 @@ namespace BankSystem.ViewModels {
             }
             Title = "Пользователь: менеджер";
             CreateClientCommand = new LambdaCommand(CreateClient, CanCreateClient);
+            RemoveClientCommand = new LambdaCommand(RemoveClient, CanRemoveClient);
         }
 
 
+        public ClientViewModel? SelectedClient { get; set; }
+
         public ICommand CreateClientCommand { get; }
+
+        public ICommand RemoveClientCommand { get; }
+
 
         private void CreateClient(object p) {
             var newClientVM = new ClientViewModel(_consultant);
@@ -39,11 +45,25 @@ namespace BankSystem.ViewModels {
 
         private bool CanCreateClient(object p) => true;
 
+        private void RemoveClient(object p) {
+            if (SelectedClient != null) {
+                _clientsRepository.Remove(SelectedClient.GetUpdatedClient().Id);
+                Clients.Remove(SelectedClient);
+                UpdateErrorText();
+            }
+        }
+
+        private bool CanRemoveClient(object p) => SelectedClient != null;
+
 
         private void UpdateErrorText(object? sender, PropertyChangedEventArgs e) {
             if (sender is ClientViewModel) {
-                ErrorText = Clients.FirstOrDefault(client => !string.IsNullOrWhiteSpace(client.Error))?.Error ?? string.Empty;
+                UpdateErrorText();
             }
+        }
+
+        private void UpdateErrorText() {
+            ErrorText = Clients.FirstOrDefault(client => !string.IsNullOrWhiteSpace(client.Error))?.Error ?? string.Empty;
         }
     }
 }

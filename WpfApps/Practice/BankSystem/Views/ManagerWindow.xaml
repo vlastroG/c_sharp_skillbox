@@ -7,9 +7,9 @@
         mc:Ignorable="d"
         Title="{Binding Title}"
         MinHeight="350"
-        MinWidth="500"
+        MinWidth="900"
         Height="450"
-        Width="800"
+        Width="900"
         d:DataContext="{d:DesignInstance vm:ManagerWindowViewModel, IsDesignTimeCreatable=False}"
         WindowStartupLocation="CenterScreen">
     <Grid>
@@ -19,6 +19,7 @@
         </Grid.RowDefinitions>
         <DataGrid Name="Input"
                   ItemsSource="{Binding Clients}"
+                  SelectedItem="{Binding SelectedClient}"
                   AutoGenerateColumns="False"
                   CanUserDeleteRows="False"
                   CanUserAddRows="False"
@@ -49,9 +50,11 @@
                    Margin="5">
             <TextBlock Style="{StaticResource ErrorTextBlock}"
                        Text="{Binding ErrorText}"/>
+            <Button Content="Удалить"
+                    Command="{Binding RemoveClientCommand}" />
             <Button Content="Создать"
                     Command="{Binding CreateClientCommand}"
-                    DockPanel.Dock="Left" />
+                    Margin="5 0 0 0" />
             <Button Content="Ok"
                     Command="{Binding OkCommand}"
                     Margin="5 0"
