@@ -10,12 +10,28 @@ namespace BankSystem.ViewModels {
 
         public ConsultantWindowViewModel(ClientsDbContext context) : base(context) {
             _consultant = new Consultant();
-            foreach (var client in _clientsRepository.Items) {
-                var clientVM = new ClientViewModel(client, _consultant);
-                Clients!.Add(clientVM);
-                clientVM.PropertyChanged += UpdateErrorText;
-            }
             Title = "Пользователь: консультант";
+
+            SelectedDepartment = Departments.First();
+        }
+
+
+        private Department? _selectedDepartment;
+
+        public override Department? SelectedDepartment {
+            get => _selectedDepartment;
+            set {
+                if (Set(ref _selectedDepartment, value)) {
+                    Clients.Clear();
+                    if (_selectedDepartment != null) {
+                        foreach (var client in _selectedDepartment.Clients) {
+                            var clientVM = new ClientViewModel(client, _consultant);
+                            Clients.Add(clientVM);
+                            clientVM.PropertyChanged += UpdateErrorText;
+                        }
+                    }
+                }
+            }
         }
 
 

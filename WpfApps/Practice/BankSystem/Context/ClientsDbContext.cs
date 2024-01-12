@@ -5,6 +5,8 @@ namespace BankSystem.Context {
     internal class ClientsDbContext : DbContext {
         public DbSet<Client> Clients { get; set; }
 
+        public DbSet<Department> Departments { get; set; }
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
             optionsBuilder.UseSqlite("Data Source=clients.db");
