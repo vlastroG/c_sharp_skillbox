@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 
 namespace BankSystem.Entities {
-    internal class Client : Entity {
+    internal class Client : Entity, IEquatable<Client?> {
         private static readonly IConfigurationRoot _config = new ConfigurationBuilder().AddUserSecrets<Client>().Build();
 
         private const string _notAccessibleData = "********";
@@ -55,6 +55,9 @@ namespace BankSystem.Entities {
         }
 
         public Client() : this("default", "default", "default", "default") { }
+
+
+        public Department? Department { get; set; }
 
 
         public string GetPassport(string login, string password) {
@@ -153,6 +156,29 @@ namespace BankSystem.Entities {
 
                 _phone = newPhone;
             }
+        }
+        public override bool Equals(object? obj) {
+            return Equals(obj as Client);
+        }
+
+        public bool Equals(Client? other) {
+            if (ReferenceEquals(null, other)) {
+                return false;
+            }
+
+            if (ReferenceEquals(this, other)) {
+                return true;
+            }
+
+            return _surname == other._surname &&
+                   _name == other._name &&
+                   _patronymic == other._patronymic &&
+                   _phone == other._phone &&
+                   _passport == other._passport;
+        }
+
+        public override int GetHashCode() {
+            return HashCode.Combine(_surname, _name, _patronymic, _phone, _passport);
         }
 
 

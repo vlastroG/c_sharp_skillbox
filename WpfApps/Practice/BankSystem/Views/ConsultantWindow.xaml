@@ -7,9 +7,9 @@
         mc:Ignorable="d"
         Title="{Binding Title}"
         MinHeight="350"
-        MinWidth="500"
+        MinWidth="1000"
         Height="450"
-        Width="800"
+        Width="1000"
         d:DataContext="{d:DesignInstance vm:ConsultantWindowViewModel, IsDesignTimeCreatable=False}"
         WindowStartupLocation="CenterScreen">
     <Grid>
@@ -17,47 +17,68 @@
             <RowDefinition />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <DataGrid Name="Input"
-                  ItemsSource="{Binding Clients}"
-                  AutoGenerateColumns="False"
-                  CanUserDeleteRows="False"
-                  CanUserAddRows="False"
-                  EnableRowVirtualization="True"
-                  IsSynchronizedWithCurrentItem="True"
-                  Margin="5">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Фамилия"
-                                    Binding="{Binding Surname}"
-                                    IsReadOnly="True"
-                                    Width="120" />
-                <DataGridTextColumn Header="Имя"
-                                    Binding="{Binding Name}"
-                                    IsReadOnly="True"
-                                    Width="120" />
-                <DataGridTextColumn Header="Отчество"
-                                    Binding="{Binding Patronymic}"
-                                    IsReadOnly="True"
-                                    Width="120" />
-                <DataGridTextColumn Header="Номер телефона"
-                                    Binding="{Binding Phone, UpdateSourceTrigger=PropertyChanged, NotifyOnValidationError=True, ValidatesOnDataErrors=True}"
-                                    Width="200" />
-                <DataGridTextColumn Header="Серия, номер паспорта"
-                                    Binding="{Binding Passport}"
-                                    IsReadOnly="True"
-                                    Width="200" />
-            </DataGrid.Columns>
-
-        </DataGrid>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="150" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <GroupBox Header="Департаменты">
+                <ListBox ItemsSource="{Binding Departments}"
+                         SelectedItem="{Binding SelectedDepartment}"
+                         IsEnabled="{Binding ClientsHaveNoErrors}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <DockPanel>
+                                <TextBlock Text="{Binding Name}" />
+                            </DockPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </GroupBox>
+            <GroupBox Header="Сотрудники"
+                      Grid.Column="1">
+                <DataGrid Name="Input"
+                          ItemsSource="{Binding Clients}"
+                          AutoGenerateColumns="False"
+                          CanUserDeleteRows="False"
+                          CanUserAddRows="False"
+                          EnableRowVirtualization="True"
+                          IsSynchronizedWithCurrentItem="True">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Фамилия"
+                                            Binding="{Binding Surname}"
+                                            IsReadOnly="True"
+                                            Width="120" />
+                        <DataGridTextColumn Header="Имя"
+                                            Binding="{Binding Name}"
+                                            IsReadOnly="True"
+                                            Width="120" />
+                        <DataGridTextColumn Header="Отчество"
+                                            Binding="{Binding Patronymic}"
+                                            IsReadOnly="True"
+                                            Width="120" />
+                        <DataGridTextColumn Header="Номер телефона"
+                                            Binding="{Binding Phone, UpdateSourceTrigger=PropertyChanged, NotifyOnValidationError=True, ValidatesOnDataErrors=True}"
+                                            Width="200" />
+                        <DataGridTextColumn Header="Серия, номер паспорта"
+                                            Binding="{Binding Passport}"
+                                            IsReadOnly="True"
+                                            Width="200" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </GroupBox>
+        </Grid>
         <DockPanel Grid.Row="1"
                    HorizontalAlignment="Right"
                    Margin="5">
             <TextBlock Style="{StaticResource ErrorTextBlock}"
-                       Text="{Binding ErrorText}"/>
+                       Text="{Binding ErrorText}" />
             <Button Content="Ok"
                     Command="{Binding OkCommand}"
                     Margin="0 0 5 0"
                     Click="ButtonOkClick"></Button>
-            <Button Content="Отмена" Click="ButtonCancelClick"></Button>
+            <Button Content="Отмена"
+                    Click="ButtonCancelClick"></Button>
         </DockPanel>
     </Grid>
 </Window>

@@ -9,24 +9,40 @@ using vlastroG.WPF.Commands;
 namespace BankSystem.ViewModels {
     internal class ManagerWindowViewModel : ClientsEditorViewModel {
 
-        private readonly Manager _consultant;
+        private readonly Manager _manager;
 
 
         public ManagerWindowViewModel(ClientsDbContext context) : base(context) {
             context.Database.Migrate();
-            _consultant = new Manager();
-            foreach (var client in _clientsRepository.Items) {
-                var clientVM = new ClientViewModel(client, _consultant);
-                Clients!.Add(clientVM);
-                clientVM.PropertyChanged += UpdateErrorText;
-            }
+            _manager = new Manager();
             Title = "Пользователь: менеджер";
             CreateClientCommand = new LambdaCommand(CreateClient, CanCreateClient);
             RemoveClientCommand = new LambdaCommand(RemoveClient, CanRemoveClient);
+
+            SelectedDepartment = Departments.First();
         }
 
 
         public ClientViewModel? SelectedClient { get; set; }
+
+
+        private Department? _selectedDepartment;
+
+        public override Department? SelectedDepartment {
+            get => _selectedDepartment;
+            set {
+                if (Set(ref _selectedDepartment, value)) {
+                    Clients.Clear();
+                    if (_selectedDepartment != null) {
+                        foreach (var client in _selectedDepartment.Clients) {
+                            var clientVM = new ClientViewModel(client, _manager);
+                            clientVM.PropertyChanged += UpdateErrorText;
+                            Clients.Add(clientVM);
+                        }
+                    }
+                }
+            }
+        }
 
         public ICommand CreateClientCommand { get; }
 
@@ -34,16 +50,19 @@ namespace BankSystem.ViewModels {
 
 
         private void CreateClient(object p) {
-            var newClientVM = new ClientViewModel(_consultant);
+            var newClientVM = new ClientViewModel(_manager);
             var window = new ClientCreationWindow() { DataContext = newClientVM };
             if (window.ShowDialog() ?? false) {
-                _clientsRepository.Add(newClientVM.GetUpdatedClient());
+                Client client = newClientVM.GetUpdatedClient();
+                client.Department = SelectedDepartment;
+                _clientsRepository.Add(client);
                 Clients.Add(newClientVM);
                 newClientVM.PropertyChanged += UpdateErrorText;
             }
         }
 
-        private bool CanCreateClient(object p) => true;
+        private bool CanCreateClient(object p) => SelectedDepartment is not null;
+
 
         private void RemoveClient(object p) {
             if (SelectedClient != null) {
