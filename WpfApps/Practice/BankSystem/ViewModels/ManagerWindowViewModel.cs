@@ -18,13 +18,10 @@ namespace BankSystem.ViewModels {
             Title = "Пользователь: менеджер";
             CreateClientCommand = new LambdaCommand(CreateClient, CanCreateClient);
             RemoveClientCommand = new LambdaCommand(RemoveClient, CanRemoveClient);
+            OpenBankAccountsEditorCommand = new LambdaCommand(OpenBankAccountsEditor, CanOpenBankAccountsEditor);
 
             SelectedDepartment = Departments.First();
         }
-
-
-        public ClientViewModel? SelectedClient { get; set; }
-
 
         private Department? _selectedDepartment;
 
@@ -48,6 +45,8 @@ namespace BankSystem.ViewModels {
 
         public ICommand RemoveClientCommand { get; }
 
+        public ICommand OpenBankAccountsEditorCommand { get; }
+
 
         private void CreateClient(object p) {
             var newClientVM = new ClientViewModel(_manager);
@@ -55,7 +54,12 @@ namespace BankSystem.ViewModels {
             if (window.ShowDialog() ?? false) {
                 Client client = newClientVM.GetUpdatedClient();
                 client.Department = SelectedDepartment;
+                client.BankAccountGeneral = new BankAccountGeneral();
+                client.BankAccountDeposit = new BankAccountDeposit();
+
                 _clientsRepository.Add(client);
+                _bankAccountsGeneralRepository.Add(client.BankAccountGeneral);
+                _bankAccountsDepositRepository.Add(client.BankAccountDeposit);
                 Clients.Add(newClientVM);
                 newClientVM.PropertyChanged += UpdateErrorText;
             }
@@ -84,5 +88,19 @@ namespace BankSystem.ViewModels {
         private void UpdateErrorText() {
             ErrorText = Clients.FirstOrDefault(client => !string.IsNullOrWhiteSpace(client.Error))?.Error ?? string.Empty;
         }
+
+
+        private void OpenBankAccountsEditor(object o) {
+            var vm = new BankAccountsEditorViewModel(
+                _manager,
+                SelectedClient!.GetUpdatedClient(),
+                _clientsRepository,
+                _bankAccountsGeneralRepository,
+                _bankAccountsDepositRepository);
+            var window = new BankAccountEditorWindow() { DataContext = vm };
+            window.ShowDialog();
+        }
+
+        private bool CanOpenBankAccountsEditor(object o) => SelectedClient is not null;
     }
 }

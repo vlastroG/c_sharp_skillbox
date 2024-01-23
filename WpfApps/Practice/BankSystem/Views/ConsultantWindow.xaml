@@ -39,6 +39,7 @@
                       Grid.Column="1">
                 <DataGrid Name="Input"
                           ItemsSource="{Binding Clients}"
+                          SelectedItem="{Binding SelectedClient}"
                           AutoGenerateColumns="False"
                           CanUserDeleteRows="False"
                           CanUserAddRows="False"
@@ -73,6 +74,10 @@
                    Margin="5">
             <TextBlock Style="{StaticResource ErrorTextBlock}"
                        Text="{Binding ErrorText}" />
+            <Button Content="Управлять счетами клиента"
+                    Width="220"
+                    Margin="5 0"
+                    Command="{Binding OpenBankAccountsEditorCommand}" />
             <Button Content="Ok"
                     Command="{Binding OkCommand}"
                     Margin="0 0 5 0"

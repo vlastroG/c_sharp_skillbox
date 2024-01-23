@@ -13,17 +13,30 @@ namespace BankSystem.ViewModels {
 
         private protected readonly DepartmentsRepository _departmentsRepository;
 
+        private protected readonly BankAccountsGeneralRepository _bankAccountsGeneralRepository;
+
+        private protected readonly BankAccountsDepositRepository _bankAccountsDepositRepository;
+
 
         protected ClientsEditorViewModel(ClientsDbContext context) {
-            context.Database.Migrate();
+            try {
+                context.Database.Migrate();
+            } catch (Microsoft.Data.Sqlite.SqliteException) {
+                context.Database.EnsureDeleted();
+                context.Database.Migrate();
+            }
             _clientsRepository = new ClientsRepository(context);
             _departmentsRepository = new DepartmentsRepository(context);
+            _bankAccountsGeneralRepository = new BankAccountsGeneralRepository(context);
+            _bankAccountsDepositRepository = new BankAccountsDepositRepository(context);
+
             _errorText = string.Empty;
             OkCommand = new LambdaCommand(UpdateData, CanUpdateData);
             Title = "Редактор клиентов";
 
             AddTestDepartments();
             AddClientsToDepartments();
+            AddMissedBankAccounts();
 
             Departments = new ObservableCollection<Department>(_departmentsRepository.Items);
             Clients = new ObservableCollection<ClientViewModel>();
@@ -32,6 +45,7 @@ namespace BankSystem.ViewModels {
 
         public ObservableCollection<ClientViewModel> Clients { get; }
 
+        public ClientViewModel? SelectedClient { get; set; }
 
         public abstract Department? SelectedDepartment { get; set; }
 
@@ -83,6 +97,24 @@ namespace BankSystem.ViewModels {
             var department = _departmentsRepository.Items.First();
             foreach (var client in clients) {
                 client.Department = department;
+                _clientsRepository.Update(client);
+            }
+        }
+
+        private void AddMissedBankAccounts() {
+            var clients = _clientsRepository.Items
+                .Where(client => client.BankAccountGeneral == null || client.BankAccountDeposit == null);
+            foreach (var client in clients) {
+                if (client.BankAccountGeneral is null) {
+                    var account = new BankAccountGeneral() { ClientWithGeneralAccount = client };
+                    _bankAccountsGeneralRepository.Add(account);
+                    client.BankAccountGeneral = account;
+                }
+                if (client.BankAccountDeposit is null) {
+                    var account = new BankAccountDeposit() { ClientWithDepositAccount = client };
+                    _bankAccountsDepositRepository.Add(account);
+                    client.BankAccountDeposit = account;
+                }
                 _clientsRepository.Update(client);
             }
         }
