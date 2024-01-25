@@ -59,6 +59,13 @@ namespace BankSystem.Entities {
 
         public Department? Department { get; set; }
 
+        public BankAccountGeneral? BankAccountGeneral { get; set; }
+
+        int BankAccountGeneralId { get; set; }
+
+        public BankAccountDeposit? BankAccountDeposit { get; set; }
+
+        int BankAccountDepositId { get; set; }
 
         public string GetPassport(string login, string password) {
             if (IsConsultant(login, password)) {
@@ -179,6 +186,10 @@ namespace BankSystem.Entities {
 
         public override int GetHashCode() {
             return HashCode.Combine(_surname, _name, _patronymic, _phone, _passport);
+        }
+
+        public override string ToString() {
+            return _surname + " " + _name;
         }
 
 

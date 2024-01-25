@@ -1,0 +1,112 @@
+﻿<Window x:Class="BankSystem.Views.BankAccountEditorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:BankSystem.ViewModels"
+        xmlns:local="clr-namespace:BankSystem.Views"
+        mc:Ignorable="d"
+        Title="BankAccountEditorWindow"
+        MinHeight="450"
+        MaxHeight="450"
+        MinWidth="800"
+        MaxWidth="800"
+        d:DataContext="{d:DesignInstance vm:BankAccountsEditorViewModel, IsDesignTimeCreatable=False}"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize">
+    <Window.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="VerticalAlignment"
+                    Value="Center" />
+        </Style>
+        <Style TargetType="Button"
+               BasedOn="{StaticResource MaterialDesignFlatMidBgButton}">
+            <Setter Property="Margin"
+                    Value="5 0" />
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <StackPanel>
+            <DockPanel>
+                <GroupBox Header="Обычный счет">
+                    <StackPanel>
+                        <TextBlock Text="{Binding StatusAccountGeneral}" />
+                        <DockPanel>
+                            <TextBlock Text="{Binding MoneyAccountGeneral}"
+                                       Width="100" />
+                            <TextBlock Text=" Р" />
+                        </DockPanel>
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox Header="Депозитный счет">
+                    <StackPanel>
+                        <TextBlock Text="{Binding StatusAccountDeposit}" />
+                        <DockPanel>
+                            <TextBlock Text="{Binding MoneyAccountDeposit}"
+                                       Width="100" />
+                            <TextBlock Text=" Р" />
+                        </DockPanel>
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox Header="Проводить операции:">
+                    <StackPanel>
+                        <CheckBox IsChecked="{Binding OperationsOnAccountGeneral}"
+                                  Content="С обычным счетом" />
+                        <CheckBox IsChecked="{Binding OperationsOnAccountGeneral, Converter={StaticResource InvertBooleanConverter}}"
+                                  Content="С депозитным счетом" />
+                    </StackPanel>
+                </GroupBox>
+            </DockPanel>
+            <DockPanel>
+                <GroupBox Header="Операции над выбранным типом счета:">
+                    <DockPanel>
+                        <Button Content="Открыть"
+                                Command="{Binding OpenAccountCommand}" />
+                        <Button Content="Закрыть"
+                                Command="{Binding CloseAccountCommand}" />
+                        <Button Content="Пополнить"
+                                Width="110"
+                                Command="{Binding PutMoneyToAccountCommand}" />
+                        <TextBlock Text="Сумма пополнения:" />
+                        <TextBox Text="{Binding MoneyToPut, UpdateSourceTrigger=PropertyChanged}"
+                                 HorizontalAlignment="Left"
+                                 Width="200" />
+                    </DockPanel>
+                </GroupBox>
+            </DockPanel>
+            <DockPanel>
+                <GroupBox Header="Перевод между счетами:" Height="Auto">
+                    <StackPanel>
+
+                        <DockPanel>
+                            <TextBlock Text="Переводить клиенту: " />
+                            <ComboBox ItemsSource="{Binding ClientsToTransfer}"
+                                      SelectedItem="{Binding SelectedTransferDestinationClient}"
+                                      Width="200" />
+                            <CheckBox IsChecked="{Binding TransferToAccountGeneral}"
+                                      Content="На обычный счет"
+                                      Margin="5 0" />
+                            <CheckBox IsChecked="{Binding TransferToAccountGeneral, Converter={StaticResource InvertBooleanConverter}}"
+                                      Content="На депозитный счет" />
+                        </DockPanel>
+                        <DockPanel HorizontalAlignment="Left"
+                                   Margin="0 5">
+
+                            <TextBlock Text="Сумма перевода:" />
+                            <TextBox Text="{Binding MoneyToTransfer, UpdateSourceTrigger=PropertyChanged}"
+                                     HorizontalAlignment="Left"
+                                     Width="200" />
+                            <Button Content="Перевести"
+                                    Width="120"
+                                    Command="{Binding TransferMoneyToAccountCommand}" />
+                        </DockPanel>
+                        <Button Width="100"
+                                Margin="0 70 0 0"
+                                Content="Выйти"
+                                Click="Button_Click" />
+                    </StackPanel>
+                </GroupBox>
+            </DockPanel>
+        </StackPanel>
+    </Grid>
+</Window>

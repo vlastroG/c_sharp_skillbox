@@ -7,6 +7,11 @@ namespace BankSystem.Context {
 
         public DbSet<Department> Departments { get; set; }
 
+        public DbSet<BankAccountGeneral> BankAccountsGeneral { get; set; }
+
+        public DbSet<BankAccountDeposit> BankAccountsDeposit { get; set; }
+
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
             optionsBuilder.UseSqlite("Data Source=clients.db");
@@ -22,6 +27,20 @@ namespace BankSystem.Context {
             modelBuilder.Entity<Client>().Property("_lastChangeData");
             modelBuilder.Entity<Client>().Property("_lastChangeDescription");
             modelBuilder.Entity<Client>().Property("_lastChangeBy");
+
+            modelBuilder.Entity<BankAccountGeneral>().UseTpcMappingStrategy().ToTable("BankAccountsGeneral");
+            modelBuilder.Entity<BankAccountGeneral>().HasKey(e => e.Number);
+            modelBuilder.Entity<BankAccountDeposit>().UseTpcMappingStrategy().ToTable("BankAccountsDeposit");
+
+            //modelBuilder.Entity<Client>()
+            //    .HasOne(e => e.BankAccountDeposit)
+            //    .WithOne(e => e.ClientWithDepositAccount)
+            //    .HasForeignKey<BankAccountDeposit>(e => e.ClientWithDepositAccountId);
+            //modelBuilder.Entity<Client>()
+            //    .HasOne(e => e.BankAccountGeneral)
+            //    .WithOne(e => e.ClientWithGeneralAccount)
+            //    .HasForeignKey<BankAccountGeneral>(e => e.ClientWithGeneralAccountId);
+
         }
     }
 }

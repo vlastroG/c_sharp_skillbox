@@ -9,6 +9,9 @@ namespace BankSystem.Repositories {
 
 
         public override IQueryable<Client> Items => base.Items
-            .Include(item => item.Department);
+            .Include(item => item.Department)
+            .Include(item => item.BankAccountGeneral)
+            .Include(item => item.BankAccountDeposit)
+            ;
     }
 }

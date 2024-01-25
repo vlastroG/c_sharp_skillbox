@@ -71,6 +71,10 @@
                    Margin="5">
             <TextBlock Style="{StaticResource ErrorTextBlock}"
                        Text="{Binding ErrorText}" />
+            <Button Content="Управлять счетами клиента"
+                    Width="220"
+                    Margin="5 0"
+                    Command="{Binding OpenBankAccountsEditorCommand}" />
             <Button Content="Удалить"
                     Command="{Binding RemoveClientCommand}" />
             <Button Content="Создать"

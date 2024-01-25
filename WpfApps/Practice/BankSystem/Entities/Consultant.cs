@@ -27,5 +27,45 @@ namespace BankSystem.Entities {
             client.SetPhone(_login, _password, phone);
             return client;
         }
+
+        public void PutMoney(IBankAccountCovariant<BankAccountGeneral> bankAccount, decimal amount) {
+            if (amount > 0) {
+                bankAccount.PutMoney(amount);
+            }
+        }
+
+        public void TransferMoney(
+            IBankAccountContravariant<BankAccountDeposit> bankAccountSource,
+            IBankAccountContravariant<BankAccountDeposit> bankAccountDestination,
+            decimal amount) {
+
+            if (amount > 0) {
+                bankAccountDestination.PutMoney(bankAccountSource.GetMoney(amount));
+            }
+        }
+
+
+        //private void Test() {
+        //    IBankAccount<BankAccountGeneral> bankAccount = new BankAccountGeneral();
+        //    IBankAccount<BankAccountDeposit> bankAccountD = new BankAccountDeposit();
+        //    PutMoney(bankAccount, 1);
+        //    PutMoney(bankAccountD, 1);
+
+        //    TransferMoney(bankAccount, bankAccountD, 100);
+        //    TransferMoney(bankAccount, bankAccount, 100);
+        //    TransferMoney(bankAccountD, bankAccount, 100);
+        //    TransferMoney(bankAccountD, bankAccountD, 100);
+
+        //    var client1 = new Client();
+        //    var client2 = new Client();
+
+        //    PutMoney(client1.BankAccountDeposit, 1);
+        //    PutMoney(client1.BankAccountGeneral, 1);
+
+        //    TransferMoney(client1.BankAccountGeneral, client2.BankAccountDeposit, 100);
+        //    TransferMoney(client1.BankAccountDeposit, client2.BankAccountDeposit, 100);
+        //    TransferMoney(client1.BankAccountDeposit, client2.BankAccountGeneral, 100);
+        //    TransferMoney(client1.BankAccountGeneral, client2.BankAccountGeneral, 100);
+        //}
     }
 }

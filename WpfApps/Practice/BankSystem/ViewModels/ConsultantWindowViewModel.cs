@@ -1,6 +1,9 @@
 ﻿using BankSystem.Context;
 using BankSystem.Entities;
+using BankSystem.Views;
 using System.ComponentModel;
+using System.Windows.Input;
+using vlastroG.WPF.Commands;
 
 namespace BankSystem.ViewModels {
     internal class ConsultantWindowViewModel : ClientsEditorViewModel {
@@ -13,7 +16,10 @@ namespace BankSystem.ViewModels {
             Title = "Пользователь: консультант";
 
             SelectedDepartment = Departments.First();
+            OpenBankAccountsEditorCommand = new LambdaCommand(OpenBankAccountsEditor, CanOpenBankAccountsEditor);
         }
+
+        public ICommand OpenBankAccountsEditorCommand { get; }
 
 
         private Department? _selectedDepartment;
@@ -40,5 +46,19 @@ namespace BankSystem.ViewModels {
                 ErrorText = Clients.FirstOrDefault(client => !string.IsNullOrWhiteSpace(client.Error))?.Error ?? string.Empty;
             }
         }
+
+
+        private void OpenBankAccountsEditor(object o) {
+            var vm = new BankAccountsEditorViewModel(
+                _consultant,
+                SelectedClient!.GetUpdatedClient(),
+                _clientsRepository,
+                _bankAccountsGeneralRepository,
+                _bankAccountsDepositRepository);
+            var window = new BankAccountEditorWindow() { DataContext = vm };
+            window.ShowDialog();
+        }
+
+        private bool CanOpenBankAccountsEditor(object o) => SelectedClient is not null;
     }
 }
