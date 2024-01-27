@@ -18,6 +18,7 @@ namespace BankSystem.Entities {
         }
 
         public Client SetClientName(Client client, string name) {
+            OnNotify($"{GetType()} меняет имя клиенту {client.Id} на {name}");
             client.SetName(_login, _password, name);
             return client;
         }
@@ -27,6 +28,7 @@ namespace BankSystem.Entities {
         }
 
         public Client SetClientSurname(Client client, string surname) {
+            OnNotify($"{GetType()} меняет фамилию клиенту {client.Id} на {surname}");
             client.SetSurname(_login, _password, surname);
             return client;
         }
@@ -36,6 +38,7 @@ namespace BankSystem.Entities {
         }
 
         public Client SetClientPatronymic(Client client, string patronymic) {
+            OnNotify($"{GetType()} меняет отчество клиенту {client.Id} на {patronymic}");
             client.SetPatronymic(_login, _password, patronymic);
             return client;
         }
@@ -45,6 +48,7 @@ namespace BankSystem.Entities {
         }
 
         public override Client SetClientPhone(Client client, string phone) {
+            OnNotify($"{GetType()} меняет телефон клиенту {client.Id} на {phone}");
             client.SetPhone(_login, _password, phone);
             return client;
         }
@@ -54,6 +58,7 @@ namespace BankSystem.Entities {
         }
 
         public Client SetClientPassport(Client client, string passport) {
+            OnNotify($"{GetType()} меняет паспорт клиенту {client.Id} на {passport}");
             client.SetPassport(_login, _password, passport);
             return client;
         }

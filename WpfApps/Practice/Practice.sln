@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WordsHandler", "WordsHandle
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "vlastroG.WPF", "vlastroG.WPF\vlastroG.WPF.csproj", "{5F13EAFA-7F4B-4658-87D4-2AE48ACC7C3C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankSystem", "BankSystem\BankSystem.csproj", "{FA6AAD9F-0230-4BBD-AA9F-5C19126AD660}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BankSystem", "BankSystem\BankSystem.csproj", "{FA6AAD9F-0230-4BBD-AA9F-5C19126AD660}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
