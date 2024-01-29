@@ -118,12 +118,12 @@ namespace BankSystem.ViewModels {
         private void OpenAccount(object p) {
             if (OperationsOnAccountGeneral) {
                 StatusAccountGeneral = _openedStatus;
-                _client.BankAccountGeneral!.Open();
-                _bankAccountsGeneralRepository.Update(_client.BankAccountGeneral);
+                _consultant.OpenAccount(_client.BankAccountGeneral!);
+                _bankAccountsGeneralRepository.Update(_client.BankAccountGeneral!);
             } else {
                 StatusAccountDeposit = _openedStatus;
-                _client.BankAccountDeposit!.Open();
-                _bankAccountsDepositRepository.Update(_client.BankAccountDeposit);
+                _consultant.OpenAccount(_client.BankAccountDeposit!);
+                _bankAccountsDepositRepository.Update(_client.BankAccountDeposit!);
             }
         }
 
@@ -136,12 +136,12 @@ namespace BankSystem.ViewModels {
         private void CloseAccount(object p) {
             if (OperationsOnAccountGeneral) {
                 StatusAccountGeneral = _closedStatus;
-                _client.BankAccountGeneral!.Close();
-                _bankAccountsGeneralRepository.Update(_client.BankAccountGeneral);
+                _consultant.CloseAccount(_client.BankAccountGeneral!);
+                _bankAccountsGeneralRepository.Update(_client.BankAccountGeneral!);
             } else {
                 StatusAccountDeposit = _closedStatus;
-                _client.BankAccountDeposit!.Close();
-                _bankAccountsDepositRepository.Update(_client.BankAccountDeposit);
+                _consultant.CloseAccount(_client.BankAccountDeposit!);
+                _bankAccountsDepositRepository.Update(_client.BankAccountDeposit!);
             }
         }
 

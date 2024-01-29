@@ -1,7 +1,8 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using BankSystem.Notification;
+using Microsoft.Extensions.Configuration;
 
 namespace BankSystem.Entities {
-    internal class Client : Entity, IEquatable<Client?> {
+    internal class Client : Entity, IEquatable<Client?>, INotification {
         private static readonly IConfigurationRoot _config = new ConfigurationBuilder().AddUserSecrets<Client>().Build();
 
         private const string _notAccessibleData = "********";
@@ -24,6 +25,7 @@ namespace BankSystem.Entities {
 
         private string _lastChangeBy;
 
+        public event NotificationHandler? Notify = NotificationService.ShowNotification;
 
         public Client(string surname, string name, string patronymic, string passport) {
             if (string.IsNullOrWhiteSpace(surname)) {
@@ -85,6 +87,7 @@ namespace BankSystem.Entities {
                 _lastChangeBy = nameof(Manager);
 
                 _passport = passport;
+                Notify?.Invoke(DateTime.Now, $"Паспорт клиента {Id} изменен на {passport}");
             }
         }
 
@@ -104,6 +107,7 @@ namespace BankSystem.Entities {
                 _lastChangeBy = nameof(Manager);
 
                 _surname = surname;
+                Notify?.Invoke(DateTime.Now, $"Фамилия клиента {Id} изменена на {surname}");
             }
         }
 
@@ -123,6 +127,7 @@ namespace BankSystem.Entities {
                 _lastChangeBy = nameof(Manager);
 
                 _name = name;
+                Notify?.Invoke(DateTime.Now, $"Имя клиента {Id} изменено на {name}");
             }
         }
 
@@ -142,6 +147,7 @@ namespace BankSystem.Entities {
                 _lastChangeBy = nameof(Manager);
 
                 _patronymic = patronymic;
+                Notify?.Invoke(DateTime.Now, $"Отчество клиента {Id} изменено на {patronymic}");
             }
         }
 
@@ -162,6 +168,7 @@ namespace BankSystem.Entities {
                 _lastChangeBy = IsManager(login, password) ? nameof(Manager) : nameof(Consultant);
 
                 _phone = newPhone;
+                Notify?.Invoke(DateTime.Now, $"Телефон клиента {Id} изменен на {newPhone}");
             }
         }
         public override bool Equals(object? obj) {
