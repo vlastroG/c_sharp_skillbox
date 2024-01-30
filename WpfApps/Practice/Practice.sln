@@ -9,6 +9,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "vlastroG.WPF", "vlastroG.WP
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BankSystem", "BankSystem\BankSystem.csproj", "{FA6AAD9F-0230-4BBD-AA9F-5C19126AD660}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankSystem.Data", "BankSystem.Data\BankSystem.Data.csproj", "{CE6EC4E1-2EA9-4D20-B840-D09CE95848CC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankSystem.Services", "BankSystem.Services\BankSystem.Services.csproj", "{A741772C-12F1-4622-B166-82870DBC1742}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankSystem.Exceptions", "BankSystem.Exceptions\BankSystem.Exceptions.csproj", "{7C6CFE45-8470-4C31-83C9-83DF368E5346}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +33,18 @@ Global
 		{FA6AAD9F-0230-4BBD-AA9F-5C19126AD660}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FA6AAD9F-0230-4BBD-AA9F-5C19126AD660}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FA6AAD9F-0230-4BBD-AA9F-5C19126AD660}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE6EC4E1-2EA9-4D20-B840-D09CE95848CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE6EC4E1-2EA9-4D20-B840-D09CE95848CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE6EC4E1-2EA9-4D20-B840-D09CE95848CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE6EC4E1-2EA9-4D20-B840-D09CE95848CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A741772C-12F1-4622-B166-82870DBC1742}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A741772C-12F1-4622-B166-82870DBC1742}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A741772C-12F1-4622-B166-82870DBC1742}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A741772C-12F1-4622-B166-82870DBC1742}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C6CFE45-8470-4C31-83C9-83DF368E5346}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C6CFE45-8470-4C31-83C9-83DF368E5346}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C6CFE45-8470-4C31-83C9-83DF368E5346}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C6CFE45-8470-4C31-83C9-83DF368E5346}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

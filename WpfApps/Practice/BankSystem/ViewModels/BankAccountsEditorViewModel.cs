@@ -1,5 +1,5 @@
-﻿using BankSystem.Entities;
-using BankSystem.Repositories;
+﻿using BankSystem.Data.Entities;
+using BankSystem.Data.Repositories;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using vlastroG.WPF.Commands;
@@ -164,8 +164,7 @@ namespace BankSystem.ViewModels {
         }
 
         private bool CanPutMoneyToAccount(object p) {
-            return (MoneyToPut > 0)
-                && ((OperationsOnAccountGeneral && _client.BankAccountGeneral!.IsActive)
+            return ((OperationsOnAccountGeneral && _client.BankAccountGeneral!.IsActive)
                 || (!OperationsOnAccountGeneral && _client.BankAccountDeposit!.IsActive));
         }
 
@@ -203,7 +202,7 @@ namespace BankSystem.ViewModels {
         }
 
         private bool CanTransferMoney(object p) {
-            return (MoneyToTransfer > 0) && (SelectedTransferDestinationClient is not null)
+            return (SelectedTransferDestinationClient is not null)
                 && ((OperationsOnAccountGeneral && _client.BankAccountGeneral!.IsActive)
                 || (!OperationsOnAccountGeneral && _client.BankAccountDeposit!.IsActive));
         }
