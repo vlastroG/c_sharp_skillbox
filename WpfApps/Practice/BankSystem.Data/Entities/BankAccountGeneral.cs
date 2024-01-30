@@ -14,6 +14,12 @@ namespace BankSystem.Data.Entities {
         }
 
 
+        public static BankAccountGeneral operator +(BankAccountGeneral first, BankAccountGeneral second) {
+            first.Money += second.Money;
+            return first;
+        }
+
+
         public string Number { get; }
 
         public bool IsActive { get; private protected set; }
