@@ -1,4 +1,5 @@
-﻿using BankSystem.Data.Notification;
+﻿using BankSystem.Data.Extensions;
+using BankSystem.Data.Notification;
 using BankSystem.Exceptions;
 using BankSystem.Services;
 using Microsoft.Extensions.Configuration;
@@ -46,7 +47,7 @@ namespace BankSystem.Data.Entities {
         public void PutMoney(IBankAccountCovariant<BankAccountGeneral> bankAccount, decimal amount) {
             try {
                 Notify?.Invoke(DateTime.Now, $"{GetType()} кладет на счет {bankAccount.Number} сумму {amount}");
-                bankAccount.PutMoney(amount);
+                bankAccount.PutMoneyToAccount(amount);
             } catch (NegativeAmountException) {
                 Notify?.Invoke(DateTime.Now, "Ошибка перевода - введена отрицательная сумма");
             }
