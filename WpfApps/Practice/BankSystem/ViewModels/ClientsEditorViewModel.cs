@@ -1,6 +1,6 @@
-﻿using BankSystem.Context;
-using BankSystem.Entities;
-using BankSystem.Repositories;
+﻿using BankSystem.Data.Context;
+using BankSystem.Data.Entities;
+using BankSystem.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
 using System.Windows.Input;

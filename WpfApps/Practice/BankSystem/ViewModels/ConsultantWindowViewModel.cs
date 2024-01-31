@@ -1,5 +1,5 @@
-﻿using BankSystem.Context;
-using BankSystem.Entities;
+﻿using BankSystem.Data.Context;
+using BankSystem.Data.Entities;
 using BankSystem.Views;
 using System.ComponentModel;
 using System.Windows.Input;

@@ -1,4 +1,4 @@
-﻿using BankSystem.Entities;
+﻿using BankSystem.Data.Entities;
 using System.ComponentModel;
 using vlastroG.WPF.ViewModels;
 
