@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34525.116
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GoodsStore", "GoodsStore\GoodsStore.csproj", "{81CDB459-4C4A-4B31-8739-3CD0F5CA8DAC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "vlastroG.WPF", "..\..\WpfApps\Practice\vlastroG.WPF\vlastroG.WPF.csproj", "{4BE3394E-E68B-48A6-B8BF-94FB2C35008D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{81CDB459-4C4A-4B31-8739-3CD0F5CA8DAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81CDB459-4C4A-4B31-8739-3CD0F5CA8DAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81CDB459-4C4A-4B31-8739-3CD0F5CA8DAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81CDB459-4C4A-4B31-8739-3CD0F5CA8DAC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4BE3394E-E68B-48A6-B8BF-94FB2C35008D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4BE3394E-E68B-48A6-B8BF-94FB2C35008D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4BE3394E-E68B-48A6-B8BF-94FB2C35008D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4BE3394E-E68B-48A6-B8BF-94FB2C35008D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5155BA61-893D-43E3-8831-6DA27AF24052}
+	EndGlobalSection
+EndGlobal

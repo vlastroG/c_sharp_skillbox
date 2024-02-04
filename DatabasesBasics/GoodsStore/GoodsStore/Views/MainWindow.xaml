@@ -1,0 +1,126 @@
+﻿<Window x:Class="GoodsStore.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GoodsStore"
+        xmlns:vm="clr-namespace:GoodsStore.ViewModels"
+        mc:Ignorable="d"
+        Title="MainWindow"
+        MinHeight="450"
+        MinWidth="1000"
+        Height="600"
+        Width="1000"
+        d:DataContext="{d:DesignInstance vm:MainWindowViewModel, IsDesignTimeCreatable=False}"
+        WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <GroupBox Header="Клиенты">
+            <DockPanel>
+
+                <DataGrid x:Name="gridClients"
+                          DockPanel.Dock="Top"
+                          ItemsSource="{Binding ClientsDataTable}"
+                          SelectedItem="{Binding SelectedClientsDataRow}"
+                          IsSynchronizedWithCurrentItem="True"
+                          SelectionMode="Single"
+                          AutoGenerateColumns="False"
+                          CanUserAddRows="False"
+                          IsReadOnly="False"
+                          CurrentCellChanged="gridClients_CurrentCellChanged"
+                          CellEditEnding="gridClients_CellEditEnding"
+                          EnableRowVirtualization="True">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Binding="{Binding Id}"
+                                            Header="Id"
+                                            IsReadOnly="True" />
+                        <DataGridTextColumn Binding="{Binding Name}"
+                                            Header="Имя"
+                                            IsReadOnly="False" />
+                        <DataGridTextColumn Binding="{Binding Surname}"
+                                            Header="Фамилия"
+                                            IsReadOnly="False" />
+                        <DataGridTextColumn Binding="{Binding Patronymic}"
+                                            Header="Отчество"
+                                            IsReadOnly="False" />
+                        <DataGridTextColumn Binding="{Binding Phone}"
+                                            Header="Телефон"
+                                            IsReadOnly="False" />
+                        <DataGridTextColumn Binding="{Binding Email}"
+                                            Header="Email"
+                                            IsReadOnly="False" />
+                    </DataGrid.Columns>
+                </DataGrid>
+                <DockPanel DockPanel.Dock="Bottom"
+                           VerticalAlignment="Bottom"
+                           HorizontalAlignment="Center">
+                    <Button Content="Добавить"
+                            Command="{Binding AddClientCommand}" />
+                    <Button Content="Удалить"
+                            Command="{Binding DeleteClientCommand}" />
+                </DockPanel>
+            </DockPanel>
+        </GroupBox>
+
+        <GroupBox Grid.Column="1"
+                  Header="Товары">
+            <DockPanel>
+                <DataGrid x:Name="gridProducts"
+                          DockPanel.Dock="Top"
+                          IsSynchronizedWithCurrentItem="True"
+                          SelectionMode="Single"
+                          AutoGenerateColumns="False"
+                          CanUserAddRows="False"
+                          ItemsSource="{Binding ProductsDataTable}"
+                          SelectedItem="{Binding SelectedProductsDataRow}"
+                          IsReadOnly="False"
+                          CurrentCellChanged="gridProducts_CurrentCellChanged"
+                          CellEditEnding="gridProducts_CellEditEnding"
+                          EnableRowVirtualization="True">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Binding="{Binding Id}"
+                                            Header="Id"
+                                            IsReadOnly="True" />
+                        <DataGridTextColumn Binding="{Binding Email}"
+                                            Header="Email покупателя"
+                                            IsReadOnly="False" />
+                        <DataGridTextColumn Binding="{Binding ProductCode}"
+                                            Header="Код товара"
+                                            IsReadOnly="False" />
+                        <DataGridTextColumn Binding="{Binding Name}"
+                                            Header="Наименование"
+                                            IsReadOnly="False" />
+                    </DataGrid.Columns>
+                </DataGrid>
+                <DockPanel DockPanel.Dock="Bottom"
+                           VerticalAlignment="Bottom"
+                           HorizontalAlignment="Center">
+                    <Button Content="Добавить"
+                            Command="{Binding AddProductCommand}" />
+                    <Button Content="Удалить"
+                            Command="{Binding DeleteProductCommand}" />
+                </DockPanel>
+            </DockPanel>
+        </GroupBox>
+
+        <DockPanel Grid.Row="1"
+                   Grid.ColumnSpan="2"
+                   HorizontalAlignment="Center"
+                   Margin="5">
+            <Button Content="Сохранить все данные"
+                    Command="{Binding SaveDataCommand}"
+                    Width="200" />
+            <Button Content="Удалить все данные"
+                    Command="{Binding DeleteAllDataCommand}"
+                    Width="200" />
+        </DockPanel>
+    </Grid>
+</Window>
