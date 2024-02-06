@@ -8,9 +8,9 @@
         mc:Ignorable="d"
         Title="MainWindow"
         MinHeight="450"
-        MinWidth="1000"
+        MinWidth="1200"
         Height="600"
-        Width="1000"
+        Width="1200"
         d:DataContext="{d:DesignInstance vm:MainWindowViewModel, IsDesignTimeCreatable=False}"
         WindowStartupLocation="CenterScreen">
     <Grid>
@@ -28,35 +28,26 @@
 
                 <DataGrid x:Name="gridClients"
                           DockPanel.Dock="Top"
-                          ItemsSource="{Binding ClientsDataTable}"
-                          SelectedItem="{Binding SelectedClientsDataRow}"
-                          IsSynchronizedWithCurrentItem="True"
+                          ItemsSource="{Binding Clients}"
+                          SelectedItem="{Binding SelectedClient}"
                           SelectionMode="Single"
                           AutoGenerateColumns="False"
                           CanUserAddRows="False"
-                          IsReadOnly="False"
-                          CurrentCellChanged="gridClients_CurrentCellChanged"
-                          CellEditEnding="gridClients_CellEditEnding"
+                          IsReadOnly="True"
                           EnableRowVirtualization="True">
                     <DataGrid.Columns>
                         <DataGridTextColumn Binding="{Binding Id}"
-                                            Header="Id"
-                                            IsReadOnly="True" />
+                                            Header="Id" />
                         <DataGridTextColumn Binding="{Binding Name}"
-                                            Header="Имя"
-                                            IsReadOnly="False" />
+                                            Header="Имя" />
                         <DataGridTextColumn Binding="{Binding Surname}"
-                                            Header="Фамилия"
-                                            IsReadOnly="False" />
+                                            Header="Фамилия" />
                         <DataGridTextColumn Binding="{Binding Patronymic}"
-                                            Header="Отчество"
-                                            IsReadOnly="False" />
+                                            Header="Отчество" />
                         <DataGridTextColumn Binding="{Binding Phone}"
-                                            Header="Телефон"
-                                            IsReadOnly="False" />
+                                            Header="Телефон" />
                         <DataGridTextColumn Binding="{Binding Email}"
-                                            Header="Email"
-                                            IsReadOnly="False" />
+                                            Header="Email" />
                     </DataGrid.Columns>
                 </DataGrid>
                 <DockPanel DockPanel.Dock="Bottom"
@@ -64,40 +55,40 @@
                            HorizontalAlignment="Center">
                     <Button Content="Добавить"
                             Command="{Binding AddClientCommand}" />
+                    <Button Content="Изменить"
+                            Command="{Binding UpdateClientCommand}" />
                     <Button Content="Удалить"
                             Command="{Binding DeleteClientCommand}" />
                 </DockPanel>
             </DockPanel>
         </GroupBox>
 
-        <GroupBox Grid.Column="1"
-                  Header="Товары">
+        <GroupBox Grid.Column="1">
+            <GroupBox.Header>
+                <DockPanel HorizontalAlignment="Left">
+                    <TextBlock Text="Товары клиента: " HorizontalAlignment="Left"/>
+                    <TextBlock Text="{Binding SelectedClient}" HorizontalAlignment="Left"/>
+                </DockPanel>
+            </GroupBox.Header>
             <DockPanel>
                 <DataGrid x:Name="gridProducts"
                           DockPanel.Dock="Top"
-                          IsSynchronizedWithCurrentItem="True"
                           SelectionMode="Single"
                           AutoGenerateColumns="False"
                           CanUserAddRows="False"
-                          ItemsSource="{Binding ProductsDataTable}"
-                          SelectedItem="{Binding SelectedProductsDataRow}"
-                          IsReadOnly="False"
-                          CurrentCellChanged="gridProducts_CurrentCellChanged"
-                          CellEditEnding="gridProducts_CellEditEnding"
+                          ItemsSource="{Binding Products}"
+                          SelectedItem="{Binding SelectedProduct}"
+                          IsReadOnly="True"
                           EnableRowVirtualization="True">
                     <DataGrid.Columns>
                         <DataGridTextColumn Binding="{Binding Id}"
-                                            Header="Id"
-                                            IsReadOnly="True" />
+                                            Header="Id" />
                         <DataGridTextColumn Binding="{Binding Email}"
-                                            Header="Email покупателя"
-                                            IsReadOnly="False" />
+                                            Header="Email покупателя" />
                         <DataGridTextColumn Binding="{Binding ProductCode}"
-                                            Header="Код товара"
-                                            IsReadOnly="False" />
+                                            Header="Код товара" />
                         <DataGridTextColumn Binding="{Binding Name}"
-                                            Header="Наименование"
-                                            IsReadOnly="False" />
+                                            Header="Наименование" />
                     </DataGrid.Columns>
                 </DataGrid>
                 <DockPanel DockPanel.Dock="Bottom"
@@ -105,6 +96,8 @@
                            HorizontalAlignment="Center">
                     <Button Content="Добавить"
                             Command="{Binding AddProductCommand}" />
+                    <Button Content="Изменить"
+                            Command="{Binding UpdateProductCommand}" />
                     <Button Content="Удалить"
                             Command="{Binding DeleteProductCommand}" />
                 </DockPanel>
@@ -115,9 +108,6 @@
                    Grid.ColumnSpan="2"
                    HorizontalAlignment="Center"
                    Margin="5">
-            <Button Content="Сохранить все данные"
-                    Command="{Binding SaveDataCommand}"
-                    Width="200" />
             <Button Content="Удалить все данные"
                     Command="{Binding DeleteAllDataCommand}"
                     Width="200" />

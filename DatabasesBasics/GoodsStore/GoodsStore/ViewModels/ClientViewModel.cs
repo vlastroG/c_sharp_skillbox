@@ -1,106 +1,85 @@
-﻿using System.ComponentModel;
-using System.Windows.Input;
-using vlastroG.WPF.Commands;
+﻿using GoodsStore.Models;
 using vlastroG.WPF.ViewModels;
 
 namespace GoodsStore.ViewModels {
-    internal class ClientViewModel : BaseViewModel, IDataErrorInfo {
-        public ClientViewModel() {
-            SaveCommand = new LambdaCommand(Save, CanSave);
+    internal class ClientViewModel : BaseViewModel, IEquatable<ClientViewModel> {
+        private readonly Client _client;
+
+
+        public ClientViewModel(Client client) {
+            _client = client ?? throw new ArgumentNullException(nameof(client));
+
+            Id = client.Id;
+            _surname = client.Surname;
+            _name = client.Name;
+            _patronymic = client.Patronymic;
+            _phone = client.Phone;
+            Email = client.Email;
         }
 
 
-        public ICommand SaveCommand { get; }
+        public int Id { get; }
 
-
-        private string _surname = string.Empty;
+        private string _surname;
         public string Surname {
             get => _surname;
-            set {
-                if (Set(ref _surname, value)) {
-                    OnPropertyChanged(nameof(Error));
-                }
-            }
+            set => Set(ref _surname, value);
         }
 
-        private string _name = string.Empty;
+        private string _name;
         public string Name {
             get => _name;
-            set {
-                if (Set(ref _name, value)) {
-                    OnPropertyChanged(nameof(Error));
-                }
-            }
+            set => Set(ref _name, value);
         }
 
-        private string _patronymic = string.Empty;
+        private string _patronymic;
         public string Patronymic {
             get => _patronymic;
-            set {
-                if (Set(ref _patronymic, value)) {
-                    OnPropertyChanged(nameof(Error));
-                }
-            }
+            set => Set(ref _patronymic, value);
         }
 
-        private string _phone = string.Empty;
-        public string Phone {
+        private string? _phone;
+        public string? Phone {
             get => _phone;
-            set {
-                if (Set(ref _phone, value)) {
-                    OnPropertyChanged(nameof(Error));
-                }
-            }
+            set => Set(ref _phone, value);
         }
 
-        private string _email = string.Empty;
-        public string Email {
-            get => _email;
-            set {
-                if (Set(ref _email, value)) {
-                    OnPropertyChanged(nameof(Error));
-                }
-            }
+        public string Email { get; }
+
+
+        public Client GetUpdatedClient() {
+            _client.Name = Name;
+            _client.Surname = Surname;
+            _client.Patronymic = Patronymic;
+            _client.Phone = Phone;
+            return _client;
         }
 
-        public string Error {
-            get {
-                return GetType()
-                    .GetProperties()
-                    .Select(prop => this[prop.Name])
-                    .FirstOrDefault(error => !string.IsNullOrWhiteSpace(error)) ?? string.Empty;
-            }
+
+        public override bool Equals(object? obj) {
+            return Equals(obj as ClientViewModel);
         }
 
-        public string this[string columnName] {
-            get {
-                var error = string.Empty;
-                switch (columnName) {
-                    case nameof(Surname):
-                    case nameof(Name):
-                    case nameof(Patronymic):
-                    case nameof(Phone):
-                    case nameof(Email):
-                        string? propertyValue = GetType()
-                            .GetProperties()
-                            .FirstOrDefault(prop => prop.Name == columnName)
-                            ?.GetValue(this)
-                            ?.ToString();
-                        if (string.IsNullOrWhiteSpace(propertyValue)) {
-                            error = "Поле не может быть пустым";
-                        } else if (propertyValue.StartsWith(' ') || propertyValue.EndsWith(' ')) {
-                            error = "Поле не может начинаться или заканчиваться пробелом";
-                        }
-                        break;
-                }
-                return error;
-            }
+
+        public bool Equals(ClientViewModel? other) {
+            if (other is null) { return false; }
+            if (ReferenceEquals(this, other)) { return true; }
+
+            return Id == other.Id
+                && Email == other.Email
+                && Name == other.Name
+                && Patronymic == other.Patronymic
+                && Surname == other.Surname
+                && Phone == other.Phone
+                ;
         }
 
-        private void Save(object p) {
-            //close window
+        public override int GetHashCode() {
+            return HashCode.Combine(Id, Surname, Name, Patronymic, Phone, Email);
         }
 
-        private bool CanSave(object p) => string.IsNullOrWhiteSpace(Error);
+        public override string ToString() {
+            return $"{Surname} {Name} {Patronymic}";
+        }
     }
 }
