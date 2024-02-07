@@ -87,7 +87,6 @@ namespace GoodsStore.ViewModels {
                     case nameof(Surname):
                     case nameof(Name):
                     case nameof(Patronymic):
-                    case nameof(Phone):
                     case nameof(Email):
                         string? propertyValue = GetType()
                             .GetProperties()
