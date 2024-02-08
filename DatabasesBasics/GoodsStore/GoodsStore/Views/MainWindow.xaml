@@ -13,6 +13,9 @@
         Width="1200"
         d:DataContext="{d:DesignInstance vm:MainWindowViewModel, IsDesignTimeCreatable=False}"
         WindowStartupLocation="CenterScreen">
+    <Window.DataContext>
+        <vm:MainWindowViewModel />
+    </Window.DataContext>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
@@ -24,7 +27,11 @@
         </Grid.RowDefinitions>
 
         <GroupBox Header="Клиенты">
-            <DockPanel>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
 
                 <DataGrid x:Name="gridClients"
                           DockPanel.Dock="Top"
@@ -52,7 +59,9 @@
                 </DataGrid>
                 <DockPanel DockPanel.Dock="Bottom"
                            VerticalAlignment="Bottom"
-                           HorizontalAlignment="Center">
+                           HorizontalAlignment="Center"
+                           Grid.Row="1"
+                           Margin="0 5 0 0">
                     <Button Content="Добавить"
                             Command="{Binding AddClientCommand}" />
                     <Button Content="Изменить"
@@ -60,17 +69,23 @@
                     <Button Content="Удалить"
                             Command="{Binding DeleteClientCommand}" />
                 </DockPanel>
-            </DockPanel>
+            </Grid>
         </GroupBox>
 
         <GroupBox Grid.Column="1">
             <GroupBox.Header>
                 <DockPanel HorizontalAlignment="Left">
-                    <TextBlock Text="Товары клиента: " HorizontalAlignment="Left"/>
-                    <TextBlock Text="{Binding SelectedClient}" HorizontalAlignment="Left"/>
+                    <TextBlock Text="Товары клиента: "
+                               HorizontalAlignment="Left" />
+                    <TextBlock Text="{Binding SelectedClient}"
+                               HorizontalAlignment="Left" />
                 </DockPanel>
             </GroupBox.Header>
-            <DockPanel>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
                 <DataGrid x:Name="gridProducts"
                           DockPanel.Dock="Top"
                           SelectionMode="Single"
@@ -93,7 +108,9 @@
                 </DataGrid>
                 <DockPanel DockPanel.Dock="Bottom"
                            VerticalAlignment="Bottom"
-                           HorizontalAlignment="Center">
+                           HorizontalAlignment="Center"
+                           Grid.Row="1"
+                           Margin="0 5 0 0">
                     <Button Content="Добавить"
                             Command="{Binding AddProductCommand}" />
                     <Button Content="Изменить"
@@ -101,7 +118,7 @@
                     <Button Content="Удалить"
                             Command="{Binding DeleteProductCommand}" />
                 </DockPanel>
-            </DockPanel>
+            </Grid>
         </GroupBox>
 
         <DockPanel Grid.Row="1"

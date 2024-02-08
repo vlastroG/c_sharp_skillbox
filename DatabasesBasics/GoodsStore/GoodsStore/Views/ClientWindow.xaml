@@ -82,10 +82,13 @@
                    HorizontalAlignment="Right">
             <Button Margin="0 0 5 0"
                     Content="Ok"
+                    IsDefault="True"
                     Command="{Binding SaveCommand}"
-                    Click="OkClick"></Button>
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=local:ClientWindow}}" />
             <Button Content="Отмена"
-                    Click="CancelClick" />
+                    IsCancel="True"
+                    Command="{Binding CancelCommand}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=local:ClientWindow}}" />
         </DockPanel>
     </Grid>
 </Window>

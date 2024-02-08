@@ -7,9 +7,9 @@
         xmlns:vm="clr-namespace:GoodsStore.ViewModels"
         mc:Ignorable="d"
         Title="{Binding Title}"
-        MaxHeight="200"
+        MaxHeight="250"
         MaxWidth="500"
-        MinHeight="200"
+        MinHeight="250"
         MinWidth="500"
         d:DataContext="{d:DesignInstance vm:ProductWindowViewModel, IsDesignTimeCreatable=False}"
         WindowStartupLocation="CenterScreen"
@@ -68,10 +68,15 @@
                    HorizontalAlignment="Right">
             <Button Margin="0 0 5 0"
                     Content="Ok"
+                    IsDefault="True"
                     Command="{Binding SaveCommand}"
-                    Click="OkClick"></Button>
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=local:ProductWindow}}">
+            </Button>
             <Button Content="Отмена"
-                    Click="CancelClick" />
+                    Command="{Binding CancelCommand}"
+                    IsCancel="True"
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=local:ProductWindow} }">
+            </Button>
         </DockPanel>
     </Grid>
 </Window>

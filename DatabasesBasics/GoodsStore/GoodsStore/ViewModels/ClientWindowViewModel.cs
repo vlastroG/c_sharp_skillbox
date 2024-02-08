@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Windows;
 using System.Windows.Input;
 using vlastroG.WPF.Commands;
 using vlastroG.WPF.ViewModels;
@@ -11,6 +12,7 @@ namespace GoodsStore.ViewModels {
             CanModifyEmail = canModifyEmail;
             Title = title;
             SaveCommand = new LambdaCommand(Save, CanSave);
+            CancelCommand = new LambdaCommand(Cancel, CanCancel);
         }
 
 
@@ -18,6 +20,8 @@ namespace GoodsStore.ViewModels {
 
 
         public ICommand SaveCommand { get; }
+
+        public ICommand CancelCommand { get; }
 
 
         private string _surname = string.Empty;
@@ -104,10 +108,24 @@ namespace GoodsStore.ViewModels {
             }
         }
 
-        private void Save(object p) {
-            //close window
-        }
 
-        private bool CanSave(object p) => string.IsNullOrWhiteSpace(Error);
+        private void Save(object p) {
+            if (!CanSave(p)) { return; }
+
+            var window = (Window)p!;
+            window.DialogResult = true;
+            window.Close();
+        }
+        private bool CanSave(object p) => string.IsNullOrWhiteSpace(Error) && (p is not null) && (p is Window);
+
+
+        private void Cancel(object p) {
+            if (!CanCancel(p)) { return; }
+
+            var window = (Window)p!;
+            window.DialogResult = false;
+            window.Close();
+        }
+        private bool CanCancel(object p) => (p is not null) && (p is Window);
     }
 }

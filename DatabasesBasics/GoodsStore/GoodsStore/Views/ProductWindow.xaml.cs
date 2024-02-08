@@ -5,13 +5,5 @@ namespace GoodsStore.Views {
         public ProductWindow() {
             InitializeComponent();
         }
-
-        private void OkClick(object sender, RoutedEventArgs e) {
-            DialogResult = true;
-        }
-
-        private void CancelClick(object sender, RoutedEventArgs e) {
-            DialogResult = false;
-        }
     }
 }
