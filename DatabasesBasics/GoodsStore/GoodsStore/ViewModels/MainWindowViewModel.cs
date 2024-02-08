@@ -94,21 +94,22 @@ namespace GoodsStore.ViewModels {
 
 
         private void AddClient(object parameter) {
-            ClientWindowViewModel clientViewModel = new ClientWindowViewModel("Создание нового клиента", true);
-            ClientWindow window = new ClientWindow() { DataContext = clientViewModel };
+            ClientWindowViewModel clientWindowViewModel = new ClientWindowViewModel("Создание нового клиента", true);
+            ClientWindow window = new ClientWindow() { DataContext = clientWindowViewModel };
             window.ShowDialog();
             if (window.DialogResult == true) {
                 try {
                     Client client = new Client() {
-                        Email = clientViewModel.Email,
-                        Name = clientViewModel.Name,
-                        Surname = clientViewModel.Surname,
-                        Patronymic = clientViewModel.Patronymic,
-                        Phone = clientViewModel.Phone
+                        Email = clientWindowViewModel.Email,
+                        Name = clientWindowViewModel.Name,
+                        Surname = clientWindowViewModel.Surname,
+                        Patronymic = clientWindowViewModel.Patronymic,
+                        Phone = clientWindowViewModel.Phone
                     };
                     _clientsRepository.Add(client);
-                    SelectedClient = new ClientViewModel(client);
-                    Clients.Add(SelectedClient);
+                    var clientVM = new ClientViewModel(client);
+                    Clients.Add(clientVM);
+                    SelectedClient = clientVM;
                 } catch (RepositoryException e) {
                     MessageBox.Show(e.Message);
                 }
@@ -167,20 +168,21 @@ namespace GoodsStore.ViewModels {
 
 
         private void AddProduct(object parameter) {
-            ProductWindowViewModel productViewModel
+            ProductWindowViewModel productWindowViewModel
                 = new ProductWindowViewModel("Создание нового товара", SelectedClient!.Email);
-            ProductWindow window = new ProductWindow() { DataContext = productViewModel };
+            ProductWindow window = new ProductWindow() { DataContext = productWindowViewModel };
             window.ShowDialog();
             if (window.DialogResult == true) {
                 try {
                     Product product = new Product() {
-                        Email = productViewModel.Email,
-                        Name = productViewModel.Name,
-                        ProductCode = productViewModel.ProductCode
+                        Email = productWindowViewModel.Email,
+                        Name = productWindowViewModel.Name,
+                        ProductCode = productWindowViewModel.ProductCode
                     };
                     _productsRepository.Add(product);
-                    SelectedProduct = new ProductViewModel(product);
-                    Products.Add(SelectedProduct);
+                    var productVM = new ProductViewModel(product);
+                    Products.Add(productVM);
+                    SelectedProduct = productVM;
                 } catch (RepositoryException e) {
                     MessageBox.Show(e.Message);
                 }
