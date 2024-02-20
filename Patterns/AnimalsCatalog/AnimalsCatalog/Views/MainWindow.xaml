@@ -1,0 +1,63 @@
+﻿<Window x:Class="AnimalsCatalog.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AnimalsCatalog"
+        xmlns:vm="clr-namespace:AnimalsCatalog.ViewModels"
+        mc:Ignorable="d"
+        Title="Каталог животных"
+        MinHeight="450"
+        MinWidth="700"
+        Height="450"
+        Width="700"
+        d:DataContext="{d:DesignInstance vm:MainWindowViewModel, IsDesignTimeCreatable=False}"
+        WindowStartupLocation="CenterScreen">
+    <Grid>
+        <GroupBox Header="Животные">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <DataGrid DockPanel.Dock="Top"
+                          ItemsSource="{Binding Animals}"
+                          SelectionMode="Single"
+                          AutoGenerateColumns="False"
+                          CanUserAddRows="False"
+                          IsReadOnly="True"
+                          EnableRowVirtualization="True">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Binding="{Binding AnimalType.Name}"
+                                            Header="Тип животного"
+                                            Width="*" />
+                        <DataGridTextColumn Binding="{Binding Name}"
+                                            Header="Название животного"
+                                            Width="*" />
+                    </DataGrid.Columns>
+                </DataGrid>
+                <DockPanel DockPanel.Dock="Bottom"
+                           VerticalAlignment="Bottom"
+                           HorizontalAlignment="Center"
+                           Grid.Row="1"
+                           Margin="0 5 0 0">
+                    <DockPanel>
+                        <TextBlock Text="Формат файлов: "
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Right" />
+                        <ComboBox ItemsSource="{Binding EnabledFileFormats}"
+                                  SelectedItem="{Binding SelectedFileFormat}"
+                                  Width="100" />
+                    </DockPanel>
+                    <Button Content="Добавить"
+                            Command="{Binding AddAnimalCommand}" />
+                    <Button Content="Загрузить"
+                            Command="{Binding LoadAnimalsCommand}" />
+                    <Button Content="Сохранить"
+                            Command="{Binding SaveAnimalsCommand}" />
+                </DockPanel>
+            </Grid>
+        </GroupBox>
+    </Grid>
+</Window>
