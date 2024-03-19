@@ -1,3 +1,5 @@
+﻿using Microsoft.EntityFrameworkCore;
+using PhoneBook.Data;
 namespace PhoneBook
 {
     public class Program
@@ -5,6 +7,9 @@ namespace PhoneBook
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            builder.Services.AddDbContext<PhoneBookContext>(options =>
+                options.UseSqlite(builder.Configuration.GetConnectionString("PhoneBookContext")
+                ?? throw new InvalidOperationException("Connection string 'PhoneBookContext' not found.")));
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
@@ -28,7 +33,7 @@ namespace PhoneBook
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=Contacts}/{action=Index}/{id?}");
 
             app.Run();
         }
