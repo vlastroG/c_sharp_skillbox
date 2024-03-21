@@ -16,12 +16,14 @@ namespace PhoneBook.Controllers
         }
 
         // GET: Contacts
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Contact.ToListAsync());
         }
 
         // GET: Contacts/Details/5
+        [HttpGet]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -40,6 +42,7 @@ namespace PhoneBook.Controllers
         }
 
         // GET: Contacts/Create
+        [HttpGet]
         public IActionResult Create()
         {
             return View();
@@ -62,6 +65,7 @@ namespace PhoneBook.Controllers
         }
 
         // GET: Contacts/Edit/5
+        [HttpGet]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -111,6 +115,7 @@ namespace PhoneBook.Controllers
         }
 
         // GET: Contacts/Delete/5
+        [HttpGet]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
