@@ -7,7 +7,12 @@ namespace PhoneBook.Models
     {
         public Contact()
         {
-
+            Surname = "default";
+            Name = "default";
+            Patronymic = "default";
+            PhoneNumber = "default";
+            Address = "default";
+            Description = "default";
         }
 
 
@@ -23,7 +28,7 @@ namespace PhoneBook.Models
 
         [DisplayName("Отчество")]
         [MaxLength(50)]
-        public string Patronymic { get; set; }
+        public string? Patronymic { get; set; }
 
         [DisplayName("Телефон")]
         [MaxLength(25)]
@@ -31,11 +36,11 @@ namespace PhoneBook.Models
 
         [DisplayName("Адрес")]
         [MaxLength(255)]
-        public string Address { get; set; }
+        public string? Address { get; set; }
 
         [DisplayName("Описание")]
         [MaxLength(255)]
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {

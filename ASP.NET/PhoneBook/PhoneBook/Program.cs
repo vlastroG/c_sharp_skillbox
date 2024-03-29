@@ -1,5 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using PhoneBook.Data;
+using Microsoft.AspNetCore.Identity;
 namespace PhoneBook
 {
     public class Program
@@ -10,6 +11,12 @@ namespace PhoneBook
             builder.Services.AddDbContext<PhoneBookContext>(options =>
                 options.UseSqlite(builder.Configuration.GetConnectionString("PhoneBookContext")
                 ?? throw new InvalidOperationException("Connection string 'PhoneBookContext' not found.")));
+
+            builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
+            {
+                options.SignIn.RequireConfirmedAccount = true;
+            })
+                .AddEntityFrameworkStores<PhoneBookContext>();
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
@@ -29,11 +36,13 @@ namespace PhoneBook
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Contacts}/{action=Index}/{id?}");
+            app.MapRazorPages();
 
             app.Run();
         }

@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using PhoneBook.Models;
 
 namespace PhoneBook.Data
 {
-    public class PhoneBookContext : DbContext
+    public class PhoneBookContext : IdentityDbContext<ApplicationUser>
     {
-        public PhoneBookContext (DbContextOptions<PhoneBookContext> options)
+        public PhoneBookContext(DbContextOptions<PhoneBookContext> options)
             : base(options)
         {
         }

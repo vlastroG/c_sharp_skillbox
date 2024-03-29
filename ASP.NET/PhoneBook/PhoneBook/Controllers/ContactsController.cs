@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PhoneBook.Data;
 using PhoneBook.Models;
@@ -43,6 +44,7 @@ namespace PhoneBook.Controllers
 
         // GET: Contacts/Create
         [HttpGet]
+        [Authorize]
         public IActionResult Create()
         {
             return View();
@@ -53,6 +55,7 @@ namespace PhoneBook.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Create([Bind("Id,Surname,Name,Patronymic,PhoneNumber,Address,Description")] Contact contact)
         {
             if (ModelState.IsValid)
@@ -66,6 +69,7 @@ namespace PhoneBook.Controllers
 
         // GET: Contacts/Edit/5
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -86,6 +90,7 @@ namespace PhoneBook.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Surname,Name,Patronymic,PhoneNumber,Address,Description")] Contact contact)
         {
             if (id != contact.Id)
@@ -116,6 +121,7 @@ namespace PhoneBook.Controllers
 
         // GET: Contacts/Delete/5
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -136,6 +142,7 @@ namespace PhoneBook.Controllers
         // POST: Contacts/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var contact = await _context.Contact.FindAsync(id);
