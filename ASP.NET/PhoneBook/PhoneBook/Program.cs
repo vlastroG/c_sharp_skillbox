@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using PhoneBook.Data;
-using Microsoft.AspNetCore.Identity;
 namespace PhoneBook
 {
     public class Program
@@ -17,6 +16,13 @@ namespace PhoneBook
                 options.SignIn.RequireConfirmedAccount = true;
             })
                 .AddEntityFrameworkStores<PhoneBookContext>();
+
+            builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy(
+                    "Admin",
+                    policyBuilder => policyBuilder.RequireClaim("AdminAccess", "True"));
+            });
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
