@@ -28,26 +28,33 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Surname)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Patronymic)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Редактировать</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Подробности</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Surname)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Patronymic)
+                </td>
+                <td>
+                    @if (User.HasClaim("AdminAccess", "True"))
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.Id">Редактировать</a> @("|")
+                        <a asp-action="Details" asp-route-id="@item.Id">Подробности</a> @("|")
+                        <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
+                    } else
+                    {
+                        <a asp-action="Details" asp-route-id="@item.Id">Подробности</a>
+                    }
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
