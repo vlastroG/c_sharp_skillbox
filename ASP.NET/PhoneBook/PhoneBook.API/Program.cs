@@ -1,5 +1,6 @@
 
 using Microsoft.EntityFrameworkCore;
+using PhoneBook.API.Auth;
 using PhoneBook.API.Data;
 
 namespace PhoneBook.API
@@ -12,16 +13,24 @@ namespace PhoneBook.API
             builder.Services.AddDbContext<PhoneBookContext>(options =>
                 options.UseSqlite(builder.Configuration.GetConnectionString("PhoneBookContext")
                 ?? throw new InvalidOperationException("Connection string not found")));
-            // Add services to the container.
+
+            builder.Services.AddIdentityCore<ApplicationUser>(o =>
+            {
+                o.Password.RequiredLength = 8;
+                o.SignIn.RequireConfirmedAccount = false;
+                o.SignIn.RequireConfirmedEmail = false;
+                o.SignIn.RequireConfirmedPhoneNumber = false;
+            })
+                .AddEntityFrameworkStores<PhoneBookContext>();
+
+            builder.Services.CopnfigureAuthentication(builder.Configuration);
 
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
@@ -30,6 +39,7 @@ namespace PhoneBook.API
 
             app.UseHttpsRedirection();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
 
