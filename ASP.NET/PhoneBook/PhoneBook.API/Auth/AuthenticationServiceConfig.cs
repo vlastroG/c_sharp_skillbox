@@ -7,11 +7,13 @@ namespace PhoneBook.API.Auth
 {
     internal static class AuthenticationServiceConfig
     {
-        internal static void CopnfigureAuthentication(this IServiceCollection services, ConfigurationManager configuration)
+        internal static void CopnfigureAuthentication(
+            this IServiceCollection services,
+            ConfigurationManager configuration)
         {
             var key = new SymmetricSecurityKey(
-                            Encoding.ASCII.GetBytes(configuration["Contacts:Key"]
-                            ?? throw new ArgumentException("Add key to user secrets")));
+                            Encoding.UTF8.GetBytes(configuration["Contacts:Key"]
+                            ?? throw new ArgumentException("Add key to user secrets 256 bits long")));
 
             var jwtAppSettingOptions = configuration.GetSection(nameof(JwtIssuerOptions));
 
@@ -51,7 +53,14 @@ namespace PhoneBook.API.Auth
 
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("Admin", policyBuilder => policyBuilder.RequireClaim("AdminAccess", "True"));
+                options.AddPolicy("ApiUser", policyBuilder
+                    => policyBuilder.RequireClaim(
+                        Helpers.Constants.Strings.JwtClaimIdentifiers.Rol,
+                        Helpers.Constants.Strings.JwtClaims.ApiAccess));
+                options.AddPolicy("Admin", policyBuilder
+                    => policyBuilder.RequireClaim(
+                        Helpers.Constants.Strings.JwtClaimIdentifiers.Admin,
+                        Helpers.Constants.Strings.JwtClaims.HasAdminAccess));
             });
         }
     }
