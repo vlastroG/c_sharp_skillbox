@@ -11,14 +11,14 @@ using PhoneBook.Data;
 namespace PhoneBook.Migrations
 {
     [DbContext(typeof(PhoneBookContext))]
-    [Migration("20240328144315_AddIdentitySchema")]
-    partial class AddIdentitySchema
+    [Migration("20240412095332_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "8.0.3");
+            modelBuilder.HasAnnotation("ProductVersion", "8.0.4");
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {

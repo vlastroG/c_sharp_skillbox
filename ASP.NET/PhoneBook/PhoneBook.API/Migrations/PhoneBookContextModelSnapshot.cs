@@ -209,7 +209,7 @@ namespace PhoneBook.API.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("PhoneBook.API.Models.Contact", b =>
+            modelBuilder.Entity("PhoneBook.Models.Contact", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()

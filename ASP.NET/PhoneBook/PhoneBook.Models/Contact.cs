@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-
 namespace PhoneBook.Models
 {
     public class Contact : IValidatableObject
@@ -58,4 +57,5 @@ namespace PhoneBook.Models
             }
         }
     }
+
 }

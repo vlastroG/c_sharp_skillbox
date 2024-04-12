@@ -51,6 +51,6 @@ namespace PhoneBook.API.Models
         /// <summary>
         /// The signing key to use when generating tokens.
         /// </summary>
-        public SigningCredentials SigningCredentials { get; set; }
+        public SigningCredentials? SigningCredentials { get; set; }
     }
 }

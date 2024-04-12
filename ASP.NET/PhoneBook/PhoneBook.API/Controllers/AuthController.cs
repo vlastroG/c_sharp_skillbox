@@ -51,17 +51,17 @@ namespace PhoneBook.API.Controllers
         }
 
 
-        private async Task<ClaimsIdentity> GetClaimsIdentity(string userName, string password)
+        private async Task<ClaimsIdentity?> GetClaimsIdentity(string userName, string password)
         {
             if (string.IsNullOrWhiteSpace(userName) || string.IsNullOrWhiteSpace(password))
             {
-                return await Task.FromResult<ClaimsIdentity>(null);
+                return await Task.FromResult<ClaimsIdentity?>(default);
             }
 
             var user = await _userManager.FindByNameAsync(userName);
             if (user == null)
             {
-                return await Task.FromResult<ClaimsIdentity>(null);
+                return await Task.FromResult<ClaimsIdentity?>(null);
             }
 
             if (await _userManager.CheckPasswordAsync(user, password))
@@ -69,7 +69,7 @@ namespace PhoneBook.API.Controllers
                 return await Task.FromResult(await _jwtFactory.GenerateClaimsIdentity(userName, user.Id));
             }
 
-            return await Task.FromResult<ClaimsIdentity>(null);
+            return await Task.FromResult<ClaimsIdentity?>(null);
         }
     }
 }

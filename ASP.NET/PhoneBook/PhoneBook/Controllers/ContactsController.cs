@@ -1,26 +1,27 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using PhoneBook.Data;
+﻿using Microsoft.AspNetCore.Mvc;
 using PhoneBook.Models;
 
 namespace PhoneBook.Controllers
 {
     public class ContactsController : Controller
     {
-        private readonly PhoneBookContext _context;
+        private readonly IHttpClientFactory _httpClientFactory;
 
-        public ContactsController(PhoneBookContext context)
+        private const string _contactsUri = "https://localhost:7227/api/contacts/";
+
+
+        public ContactsController(IHttpClientFactory httpClientFactory)
         {
-            context.Database.Migrate();
-            _context = context;
+            _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
         }
 
         // GET: Contacts
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Contact.ToListAsync());
+            using HttpClient client = _httpClientFactory.CreateClient();
+            var contacts = await client.GetFromJsonAsync<IEnumerable<Contact>>(_contactsUri);
+            return View(contacts);
         }
 
         // GET: Contacts/Details/5
@@ -32,8 +33,8 @@ namespace PhoneBook.Controllers
                 return NotFound();
             }
 
-            var contact = await _context.Contact
-                .FirstOrDefaultAsync(m => m.Id == id);
+            using HttpClient client = _httpClientFactory.CreateClient();
+            var contact = await client.GetFromJsonAsync<Contact>(_contactsUri + id);
             if (contact == null)
             {
                 return NotFound();
@@ -44,7 +45,6 @@ namespace PhoneBook.Controllers
 
         // GET: Contacts/Create
         [HttpGet]
-        [Authorize]
         public IActionResult Create()
         {
             return View();
@@ -55,21 +55,25 @@ namespace PhoneBook.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize]
         public async Task<IActionResult> Create([Bind("Id,Surname,Name,Patronymic,PhoneNumber,Address,Description")] Contact contact)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(contact);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                using HttpClient client = _httpClientFactory.CreateClient();
+                var response = await client.PutAsJsonAsync(_contactsUri + "Create", contact);
+                if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                {
+                    return RedirectToAction(nameof(Index));
+                } else
+                {
+                    return BadRequest(response);
+                }
             }
             return View(contact);
         }
 
         // GET: Contacts/Edit/5
         [HttpGet]
-        [Authorize("Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -77,7 +81,8 @@ namespace PhoneBook.Controllers
                 return NotFound();
             }
 
-            var contact = await _context.Contact.FindAsync(id);
+            using HttpClient client = _httpClientFactory.CreateClient();
+            var contact = await client.GetFromJsonAsync<Contact>(_contactsUri + id);
             if (contact == null)
             {
                 return NotFound();
@@ -90,7 +95,6 @@ namespace PhoneBook.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize("Admin")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Surname,Name,Patronymic,PhoneNumber,Address,Description")] Contact contact)
         {
             if (id != contact.Id)
@@ -100,28 +104,22 @@ namespace PhoneBook.Controllers
 
             if (ModelState.IsValid)
             {
-                try
+
+                using HttpClient client = _httpClientFactory.CreateClient();
+                var response = await client.PostAsJsonAsync(_contactsUri + $"Update/{id}", contact);
+                if (response.StatusCode == System.Net.HttpStatusCode.OK)
                 {
-                    _context.Update(contact);
-                    await _context.SaveChangesAsync();
-                } catch (DbUpdateConcurrencyException)
+                    return RedirectToAction(nameof(Index));
+                } else
                 {
-                    if (!ContactExists(contact.Id))
-                    {
-                        return NotFound();
-                    } else
-                    {
-                        throw;
-                    }
+                    return NotFound();
                 }
-                return RedirectToAction(nameof(Index));
             }
             return View(contact);
         }
 
         // GET: Contacts/Delete/5
         [HttpGet]
-        [Authorize("Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -129,35 +127,30 @@ namespace PhoneBook.Controllers
                 return NotFound();
             }
 
-            var contact = await _context.Contact
-                .FirstOrDefaultAsync(m => m.Id == id);
+            using HttpClient client = _httpClientFactory.CreateClient();
+            var contact = await client.GetFromJsonAsync<Contact>(_contactsUri + id);
             if (contact == null)
             {
                 return NotFound();
             }
-
             return View(contact);
+
         }
 
         // POST: Contacts/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize("Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var contact = await _context.Contact.FindAsync(id);
-            if (contact != null)
+            using HttpClient client = _httpClientFactory.CreateClient();
+            var response = await client.DeleteAsync(_contactsUri + $"Delete/{id}");
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
-                _context.Contact.Remove(contact);
+                return RedirectToAction(nameof(Index));
+            } else
+            {
+                return NotFound();
             }
-
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        private bool ContactExists(int id)
-        {
-            return _context.Contact.Any(e => e.Id == id);
         }
     }
 }

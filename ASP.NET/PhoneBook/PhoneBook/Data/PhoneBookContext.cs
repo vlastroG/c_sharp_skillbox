@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using PhoneBook.Models;
 
 namespace PhoneBook.Data
 {
@@ -10,6 +11,6 @@ namespace PhoneBook.Data
         {
         }
 
-        public DbSet<PhoneBook.Models.Contact> Contact { get; set; } = default!;
+        public DbSet<Contact> Contact { get; set; } = default!;
     }
 }

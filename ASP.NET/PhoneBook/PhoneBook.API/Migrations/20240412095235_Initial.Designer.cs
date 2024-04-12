@@ -11,8 +11,8 @@ using PhoneBook.API.Data;
 namespace PhoneBook.API.Migrations
 {
     [DbContext(typeof(PhoneBookContext))]
-    [Migration("20240409195822_AddIDentity")]
-    partial class AddIDentity
+    [Migration("20240412095235_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -212,7 +212,7 @@ namespace PhoneBook.API.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("PhoneBook.API.Models.Contact", b =>
+            modelBuilder.Entity("PhoneBook.Models.Contact", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()

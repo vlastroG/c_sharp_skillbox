@@ -26,6 +26,8 @@ namespace PhoneBook
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.AddHttpClient();
+
 
             var app = builder.Build();
 
@@ -49,6 +51,15 @@ namespace PhoneBook
                 name: "default",
                 pattern: "{controller=Contacts}/{action=Index}/{id?}");
             app.MapRazorPages();
+
+            if (app.Environment.IsDevelopment())
+            {
+                using (var scope = app.Services.CreateScope())
+                {
+                    var db = scope.ServiceProvider.GetRequiredService<PhoneBookContext>();
+                    db.Database.Migrate();
+                }
+            }
 
             app.Run();
         }
