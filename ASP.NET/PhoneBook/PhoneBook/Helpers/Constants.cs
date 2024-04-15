@@ -9,5 +9,7 @@
 
 
         internal const string RegisterUri = "https://localhost:7227/api/Accounts/Register";
+
+        internal const string TokenName = "token";
     }
 }

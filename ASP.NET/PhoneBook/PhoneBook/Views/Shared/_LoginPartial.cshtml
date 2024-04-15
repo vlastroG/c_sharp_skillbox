@@ -1,13 +1,13 @@
 ﻿@using System.IdentityModel.Tokens.Jwt;
 
 <ul class="navbar-nav">
-    @if (!string.IsNullOrWhiteSpace(Context.Session.GetString("token")))
+    @if (!string.IsNullOrWhiteSpace(Context.Session.GetString(PhoneBook.Helpers.Constants.TokenName)))
     {
         <li class="nav-item">
             <a class="nav-link text-dark">
                 @{
-                    var token = new JwtSecurityToken(Context.Session.GetString("token"));
-                            @token.Subject
+                    var token = new JwtSecurityToken(Context.Session.GetString(PhoneBook.Helpers.Constants.TokenName));
+                    @token.Subject
                 }
             </a>
         </li>

@@ -99,7 +99,7 @@ namespace PhoneBook.Areas.Identity.Pages.Account
                 try
                 {
                     var userToken = JsonConvert.DeserializeObject<AuthResponse>(content);
-                    HttpContext.Session.SetString("token", userToken?.AuthToken);
+                    HttpContext.Session.SetString(Helpers.Constants.TokenName, userToken?.AuthToken);
                     return LocalRedirect(returnUrl);
                 } catch (JsonReaderException)
                 {

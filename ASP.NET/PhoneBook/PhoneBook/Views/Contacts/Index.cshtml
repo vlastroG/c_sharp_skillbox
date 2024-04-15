@@ -1,4 +1,5 @@
-﻿@model IEnumerable<PhoneBook.Models.Contact>
+﻿@using PhoneBook.Helpers
+@model IEnumerable<PhoneBook.Models.Contact>
 
 @{
     ViewData["Title"] = "Index";
@@ -6,9 +7,12 @@
 
 <h1>Контакты</h1>
 
-<p>
-    <a asp-action="Create">Создать новый</a>
-</p>
+@if (Context.Session.IsAuthorizedUser())
+{
+    <p>
+        <a asp-action="Create">Создать новый</a>
+    </p>
+}
 <table class="table">
     <thead>
         <tr>
@@ -44,7 +48,7 @@
                     @Html.DisplayFor(modelItem => item.Patronymic)
                 </td>
                 <td>
-                    @if (User.HasClaim("AdminAccess", "True"))
+                    @if (Context.Session.IsAdminUser())
                     {
                         <a asp-action="Edit" asp-route-id="@item.Id">Редактировать</a> @("|")
                         <a asp-action="Details" asp-route-id="@item.Id">Подробности</a> @("|")

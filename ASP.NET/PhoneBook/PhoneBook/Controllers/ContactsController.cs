@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PhoneBook.Helpers;
 using PhoneBook.Models;
+using System.Net.Http.Headers;
 
 namespace PhoneBook.Controllers
 {
@@ -45,7 +47,13 @@ namespace PhoneBook.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            return View();
+            if (HttpContext.Session.IsAuthorizedUser())
+            {
+                return View();
+            } else
+            {
+                return RedirectToLogin();
+            }
         }
 
         // POST: Contacts/Create
@@ -55,37 +63,54 @@ namespace PhoneBook.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Surname,Name,Patronymic,PhoneNumber,Address,Description")] Contact contact)
         {
-            if (ModelState.IsValid)
+            if (HttpContext.Session.IsAuthorizedUser())
             {
-                using HttpClient client = _httpClientFactory.CreateClient();
-                var response = await client.PutAsJsonAsync(Helpers.Constants.ContactsUri + "Create", contact);
-                if (response.IsSuccessStatusCode)
+                if (ModelState.IsValid)
                 {
-                    return RedirectToAction(nameof(Index));
-                } else
-                {
-                    return BadRequest(response);
+                    using HttpClient client = _httpClientFactory.CreateClient();
+                    AddAuthenticationHeader(client);
+                    var response = await client.PutAsJsonAsync(Constants.ContactsUri + "Create", contact);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        return RedirectToAction(nameof(Index));
+                    } else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                    {
+                        return RedirectToLogin();
+                    } else
+                    {
+                        return BadRequest(response);
+                    }
                 }
+                return View(contact);
+            } else
+            {
+                return RedirectToLogin();
             }
-            return View(contact);
         }
 
         // GET: Contacts/Edit/5
         [HttpGet]
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
+            if (HttpContext.Session.IsAdminUser())
             {
-                return NotFound();
-            }
+                if (id == null)
+                {
+                    return NotFound();
+                }
 
-            using HttpClient client = _httpClientFactory.CreateClient();
-            var contact = await client.GetFromJsonAsync<Contact>(Helpers.Constants.ContactsUri + id);
-            if (contact == null)
+                using HttpClient client = _httpClientFactory.CreateClient();
+                AddAuthenticationHeader(client);
+                var contact = await client.GetFromJsonAsync<Contact>(Constants.ContactsUri + id);
+                if (contact == null)
+                {
+                    return NotFound();
+                }
+                return View(contact);
+            } else
             {
-                return NotFound();
+                return RedirectToAccessDenied();
             }
-            return View(contact);
         }
 
         // POST: Contacts/Edit/5
@@ -95,44 +120,62 @@ namespace PhoneBook.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Surname,Name,Patronymic,PhoneNumber,Address,Description")] Contact contact)
         {
-            if (id != contact.Id)
+            if (HttpContext.Session.IsAdminUser())
             {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-
-                using HttpClient client = _httpClientFactory.CreateClient();
-                var response = await client.PostAsJsonAsync(Helpers.Constants.ContactsUri + $"Update/{id}", contact);
-                if (response.IsSuccessStatusCode)
-                {
-                    return RedirectToAction(nameof(Index));
-                } else
+                if (id != contact.Id)
                 {
                     return NotFound();
                 }
+
+                if (ModelState.IsValid)
+                {
+                    using HttpClient client = _httpClientFactory.CreateClient();
+                    AddAuthenticationHeader(client);
+                    var response = await client.PostAsJsonAsync(Constants.ContactsUri + $"Update/{id}", contact);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        return RedirectToAction(nameof(Index));
+                    } else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                    {
+                        return RedirectToLogin();
+                    } else if (response.StatusCode == System.Net.HttpStatusCode.Forbidden)
+                    {
+                        return RedirectToAccessDenied();
+                    } else
+                    {
+                        return NotFound();
+                    }
+                }
+                return View(contact);
+            } else
+            {
+                return RedirectToAccessDenied();
             }
-            return View(contact);
         }
 
         // GET: Contacts/Delete/5
         [HttpGet]
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
+            if (HttpContext.Session.IsAdminUser())
             {
-                return NotFound();
-            }
+                if (id == null)
+                {
+                    return NotFound();
+                }
 
-            using HttpClient client = _httpClientFactory.CreateClient();
-            var contact = await client.GetFromJsonAsync<Contact>(Helpers.Constants.ContactsUri + id);
-            if (contact == null)
+                using HttpClient client = _httpClientFactory.CreateClient();
+                AddAuthenticationHeader(client);
+                var contact = await client.GetFromJsonAsync<Contact>(Constants.ContactsUri + id);
+                if (contact == null)
+                {
+                    return NotFound();
+                }
+                return View(contact);
+            } else
             {
-                return NotFound();
+                return RedirectToAccessDenied();
             }
-            return View(contact);
-
         }
 
         // POST: Contacts/Delete/5
@@ -140,15 +183,46 @@ namespace PhoneBook.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            using HttpClient client = _httpClientFactory.CreateClient();
-            var response = await client.DeleteAsync(Helpers.Constants.ContactsUri + $"Delete/{id}");
-            if (response.IsSuccessStatusCode)
+            if (HttpContext.Session.IsAdminUser())
             {
-                return RedirectToAction(nameof(Index));
+                using HttpClient client = _httpClientFactory.CreateClient();
+                AddAuthenticationHeader(client);
+                var response = await client.DeleteAsync(Constants.ContactsUri + $"Delete/{id}");
+                if (response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction(nameof(Index));
+                } else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                {
+                    return RedirectToLogin();
+                } else if (response.StatusCode == System.Net.HttpStatusCode.Forbidden)
+                {
+                    return RedirectToAccessDenied();
+                } else
+                {
+                    return NotFound();
+                }
             } else
             {
-                return NotFound();
+                return RedirectToAccessDenied();
             }
+        }
+
+
+        private RedirectToPageResult RedirectToLogin()
+        {
+            HttpContext.Session.Clear();
+            return RedirectToPage("/Account/Login", new { area = "Identity" });
+        }
+
+        private RedirectToPageResult RedirectToAccessDenied()
+        {
+            return RedirectToPage("/Account/AccessDenied", new { area = "Identity" });
+        }
+
+        private void AddAuthenticationHeader(HttpClient client)
+        {
+            client.DefaultRequestHeaders.Authorization
+                = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString(Constants.TokenName));
         }
     }
 }
