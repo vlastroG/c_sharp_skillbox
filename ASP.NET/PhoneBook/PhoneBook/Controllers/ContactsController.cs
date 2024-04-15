@@ -7,8 +7,6 @@ namespace PhoneBook.Controllers
     {
         private readonly IHttpClientFactory _httpClientFactory;
 
-        private const string _contactsUri = "https://localhost:7227/api/contacts/";
-
 
         public ContactsController(IHttpClientFactory httpClientFactory)
         {
@@ -20,7 +18,8 @@ namespace PhoneBook.Controllers
         public async Task<IActionResult> Index()
         {
             using HttpClient client = _httpClientFactory.CreateClient();
-            var contacts = await client.GetFromJsonAsync<IEnumerable<Contact>>(_contactsUri);
+            var contacts = await client.GetFromJsonAsync<IEnumerable<Contact>>(Helpers.Constants.ContactsUri);
+
             return View(contacts);
         }
 
@@ -32,9 +31,8 @@ namespace PhoneBook.Controllers
             {
                 return NotFound();
             }
-
             using HttpClient client = _httpClientFactory.CreateClient();
-            var contact = await client.GetFromJsonAsync<Contact>(_contactsUri + id);
+            var contact = await client.GetFromJsonAsync<Contact>(Helpers.Constants.ContactsUri + id);
             if (contact == null)
             {
                 return NotFound();
@@ -60,8 +58,8 @@ namespace PhoneBook.Controllers
             if (ModelState.IsValid)
             {
                 using HttpClient client = _httpClientFactory.CreateClient();
-                var response = await client.PutAsJsonAsync(_contactsUri + "Create", contact);
-                if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                var response = await client.PutAsJsonAsync(Helpers.Constants.ContactsUri + "Create", contact);
+                if (response.IsSuccessStatusCode)
                 {
                     return RedirectToAction(nameof(Index));
                 } else
@@ -82,7 +80,7 @@ namespace PhoneBook.Controllers
             }
 
             using HttpClient client = _httpClientFactory.CreateClient();
-            var contact = await client.GetFromJsonAsync<Contact>(_contactsUri + id);
+            var contact = await client.GetFromJsonAsync<Contact>(Helpers.Constants.ContactsUri + id);
             if (contact == null)
             {
                 return NotFound();
@@ -106,8 +104,8 @@ namespace PhoneBook.Controllers
             {
 
                 using HttpClient client = _httpClientFactory.CreateClient();
-                var response = await client.PostAsJsonAsync(_contactsUri + $"Update/{id}", contact);
-                if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                var response = await client.PostAsJsonAsync(Helpers.Constants.ContactsUri + $"Update/{id}", contact);
+                if (response.IsSuccessStatusCode)
                 {
                     return RedirectToAction(nameof(Index));
                 } else
@@ -128,7 +126,7 @@ namespace PhoneBook.Controllers
             }
 
             using HttpClient client = _httpClientFactory.CreateClient();
-            var contact = await client.GetFromJsonAsync<Contact>(_contactsUri + id);
+            var contact = await client.GetFromJsonAsync<Contact>(Helpers.Constants.ContactsUri + id);
             if (contact == null)
             {
                 return NotFound();
@@ -143,8 +141,8 @@ namespace PhoneBook.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             using HttpClient client = _httpClientFactory.CreateClient();
-            var response = await client.DeleteAsync(_contactsUri + $"Delete/{id}");
-            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            var response = await client.DeleteAsync(Helpers.Constants.ContactsUri + $"Delete/{id}");
+            if (response.IsSuccessStatusCode)
             {
                 return RedirectToAction(nameof(Index));
             } else

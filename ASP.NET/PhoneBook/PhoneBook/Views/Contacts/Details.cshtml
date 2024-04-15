@@ -1,4 +1,5 @@
-﻿@model PhoneBook.Models.Contact
+﻿@using PhoneBook.Helpers
+@model PhoneBook.Models.Contact
 
 @{
     ViewData["Title"] = "Details";
@@ -47,7 +48,7 @@
     </dl>
 </div>
 <div>
-    @if (User.HasClaim("AdminAccess", "True"))
+    @if (Context.Session.IsAdminUser())
     {
         <a asp-action="Edit" asp-route-id="@Model?.Id">Правка</a> @("|")
         <a asp-action="Index">Назад к списку</a>
