@@ -36,9 +36,9 @@ namespace PhoneBook.API.Models
         public DateTime IssuedAt => DateTime.UtcNow;
 
         /// <summary>
-        /// Set the timespan the token will be valid for (default is 1 min)
+        /// Set the timespan the token will be valid for (default is 5 min)
         /// </summary>
-        public TimeSpan ValidFor { get; set; } = TimeSpan.FromMinutes(1);
+        public TimeSpan ValidFor { get; set; } = TimeSpan.FromMinutes(5);
 
 
 

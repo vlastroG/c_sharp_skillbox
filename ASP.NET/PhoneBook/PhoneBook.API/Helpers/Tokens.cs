@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using PhoneBook.API.Auth;
 using PhoneBook.API.Models;
+using PhoneBook.Models;
 using System.Security.Claims;
 
 namespace PhoneBook.API.Helpers
@@ -14,11 +15,11 @@ namespace PhoneBook.API.Helpers
             JwtIssuerOptions jwtOptions,
             JsonSerializerSettings serializerSettings)
         {
-            var response = new
+            var response = new AuthResponse()
             {
-                id = identity.Claims.Single(c => c.Type == "id").Value,
-                auth_token = await jwtFactory.GenerateEncodedToken(userName, identity),
-                expires_in = (int)jwtOptions.ValidFor.TotalSeconds
+                Id = identity.Claims.Single(c => c.Type == "id").Value,
+                AuthToken = await jwtFactory.GenerateEncodedToken(userName, identity),
+                ExpiresInSec = (int)jwtOptions.ValidFor.TotalSeconds
             };
 
             return JsonConvert.SerializeObject(response, serializerSettings);

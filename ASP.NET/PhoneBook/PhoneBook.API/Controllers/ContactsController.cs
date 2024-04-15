@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PhoneBook.API.Data;
 using PhoneBook.Models;
@@ -37,7 +38,7 @@ namespace PhoneBook.API.Controllers
             }
         }
 
-        //[Authorize("Admin")]
+        [Authorize("Admin")]
         [HttpPost("Update/{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] Contact contact)
         {
@@ -63,7 +64,7 @@ namespace PhoneBook.API.Controllers
             return Ok();
         }
 
-        //[Authorize("ApiUser")]
+        [Authorize("ApiUser")]
         [HttpPut("Create")]
         public async Task<IActionResult> Create([FromBody] Contact contact)
         {
@@ -79,7 +80,7 @@ namespace PhoneBook.API.Controllers
             }
         }
 
-        //[Authorize("Admin")]
+        [Authorize("Admin")]
         [HttpDelete("Delete/{id}")]
         public async Task<IActionResult> Delete(int id)
         {
