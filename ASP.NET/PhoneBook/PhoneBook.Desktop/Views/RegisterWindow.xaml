@@ -4,9 +4,46 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PhoneBook.Desktop.Views"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:vm="clr-namespace:PhoneBook.Desktop.ViewModels"
         mc:Ignorable="d"
-        Title="RegisterWindow" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+        Title="Регистрация"
+        MinHeight="220"
+        MinWidth="400"
+        MaxHeight="220"
+        MaxWidth="400"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterOwner"
+        d:DataContext="{d:DesignInstance vm:RegisterWindowViewModel, IsDesignTimeCreatable=False}">
+    <StackPanel Width="350"
+                VerticalAlignment="Bottom"
+                Margin="0 0 0 25">
+
+        <TextBox materialDesign:HintAssist.Hint="email"
+                 HorizontalContentAlignment="Center"
+                 Text="{Binding Email}">
+            <TextBox.Resources>
+                <Style TargetType="{x:Type materialDesign:SmartHint}">
+                    <Setter Property="HorizontalAlignment"
+                            Value="Center" />
+                </Style>
+            </TextBox.Resources>
+        </TextBox>
+        <PasswordBox x:Name="PasswordBox"
+                     materialDesign:HintAssist.Hint="password"
+                     Margin="0 25"
+                     HorizontalContentAlignment="Center">
+            <PasswordBox.Resources>
+                <Style TargetType="{x:Type materialDesign:SmartHint}">
+                    <Setter Property="HorizontalAlignment"
+                            Value="Center" />
+                </Style>
+            </PasswordBox.Resources>
+        </PasswordBox>
+
+        <Button Content="Зарегистрироваться"
+                Command="{Binding RegisterCommand}"
+                CommandParameter="{Binding ElementName=PasswordBox}"
+                IsDefault="True" />
+    </StackPanel>
 </Window>

@@ -1,6 +1,7 @@
 ﻿using PhoneBook.Desktop.Commands;
 using PhoneBook.Desktop.Services;
 using PhoneBook.Exceptions;
+using System.ComponentModel.DataAnnotations;
 using System.Windows.Controls;
 using System.Windows.Input;
 
@@ -25,6 +26,7 @@ namespace PhoneBook.Desktop.ViewModels
 
 
         private string? _email;
+        [EmailAddress]
         public string? Email
         {
             get => _email;

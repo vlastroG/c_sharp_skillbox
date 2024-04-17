@@ -7,6 +7,7 @@ namespace PhoneBook.Desktop.Views
     {
         public RegisterWindow(RegisterWindowViewModel registerWindowViewModel)
         {
+            Owner = Application.Current.MainWindow;
             DataContext = registerWindowViewModel;
             InitializeComponent();
         }

@@ -63,14 +63,14 @@ namespace PhoneBook.Desktop.Services
         }
 
 
-        public async Task<bool> Register(string email, string password)
+        public async Task<bool> Register(string email, PasswordBox passwordBox)
         {
             using HttpClient httpClient = _httpClientFactory.CreateClient();
 
             var builder = new UriBuilder(Helpers.Constants.RegisterUri);
             var query = HttpUtility.ParseQueryString(builder.Query);
             query["email"] = email;
-            query["password"] = password;
+            query["password"] = passwordBox.Password;
             builder.Query = query.ToString();
             string url = builder.ToString();
             var request = new HttpRequestMessage(HttpMethod.Post, url);

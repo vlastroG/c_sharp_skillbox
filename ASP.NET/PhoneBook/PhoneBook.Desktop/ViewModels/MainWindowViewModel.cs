@@ -74,8 +74,12 @@ namespace PhoneBook.Desktop.ViewModels
         private bool CanRegister(object p) => true;
         private void Register(object p)
         {
+            var window = _serviceProvider.GetRequiredService<RegisterWindow>();
+            window.ShowDialog();
 
+            UpdateWindow();
         }
+
 
         private void UpdateWindow()
         {
