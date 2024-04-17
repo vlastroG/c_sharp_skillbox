@@ -19,6 +19,9 @@ namespace PhoneBook.Desktop.ViewModels
             _selectedViewModel = _serviceProvider.GetRequiredService<AnonymMainViewModel>();
 
             LoginCommand = new LambdaCommand(Login, CanLogin);
+            LogoutCommand = new LambdaCommand(Logout, CanLogout);
+            RegisterCommand = new LambdaCommand(Register, CanRegister);
+            UpdateCommand = new LambdaCommand(Update, CanUpdate);
         }
 
 
@@ -42,6 +45,14 @@ namespace PhoneBook.Desktop.ViewModels
 
         public ICommand LoginCommand { get; }
 
+        public ICommand LogoutCommand { get; }
+
+        public ICommand RegisterCommand { get; }
+
+        public ICommand UpdateCommand { get; }
+
+
+
         private bool CanLogin(object p) => true;
 
         private void Login(object p)
@@ -49,19 +60,43 @@ namespace PhoneBook.Desktop.ViewModels
             var window = _serviceProvider.GetRequiredService<LoginWindow>();
             window.ShowDialog();
 
+            UpdateWindow();
+        }
+
+
+        private bool CanLogout(object p) => true;
+        private void Logout(object p)
+        {
+            _accountService.Logout();
+            UpdateWindow();
+        }
+
+        private bool CanRegister(object p) => true;
+        private void Register(object p)
+        {
+
+        }
+
+        private void UpdateWindow()
+        {
             UserName = _accountService.GetUserName();
             switch (_accountService.GetUserRole())
             {
-                case UserRoles.User:
-                    SelectedViewModel = _serviceProvider.GetRequiredService<UserMainViewModel>();
-                    break;
                 case UserRoles.Admin:
                     SelectedViewModel = _serviceProvider.GetRequiredService<AdminMainViewModel>();
+                    break;
+                case UserRoles.User:
+                    SelectedViewModel = _serviceProvider.GetRequiredService<UserMainViewModel>();
                     break;
                 default:
                     SelectedViewModel = _serviceProvider.GetRequiredService<AnonymMainViewModel>();
                     break;
             }
+        }
+        private bool CanUpdate(object p) => true;
+        private void Update(object p)
+        {
+            UpdateWindow();
         }
     }
 }

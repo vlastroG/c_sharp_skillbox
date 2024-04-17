@@ -1,9 +1,11 @@
 ﻿using Newtonsoft.Json;
+using PhoneBook.Exceptions;
 using PhoneBook.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http;
 using System.Security.Claims;
 using System.Web;
+using System.Windows.Controls;
 
 namespace PhoneBook.Desktop.Services
 {
@@ -22,18 +24,25 @@ namespace PhoneBook.Desktop.Services
         public string Token { get; private set; }
 
 
-        public async Task<bool> Login(string email, string password)
+        public async Task<bool> Login(string email, PasswordBox passwordBox)
         {
             using HttpClient httpClient = _httpClientFactory.CreateClient();
 
             var builder = new UriBuilder(Helpers.Constants.LoginUri);
             var query = HttpUtility.ParseQueryString(builder.Query);
             query["userName"] = email;
-            query["password"] = password;
+            query["password"] = passwordBox.Password;
             builder.Query = query.ToString();
             string url = builder.ToString();
             var request = new HttpRequestMessage(HttpMethod.Post, url);
-            var response = await httpClient.SendAsync(request);
+            HttpResponseMessage response;
+            try
+            {
+                response = await httpClient.SendAsync(request);
+            } catch (HttpRequestException)
+            {
+                throw new ServerNotResponseException();
+            }
             var content = await response.Content.ReadAsStringAsync();
 
             try
@@ -65,7 +74,14 @@ namespace PhoneBook.Desktop.Services
             builder.Query = query.ToString();
             string url = builder.ToString();
             var request = new HttpRequestMessage(HttpMethod.Post, url);
-            var response = await httpClient.SendAsync(request);
+            HttpResponseMessage response;
+            try
+            {
+                response = await httpClient.SendAsync(request);
+            } catch (HttpRequestException)
+            {
+                throw new ServerNotResponseException();
+            }
             return response.IsSuccessStatusCode;
         }
 
@@ -86,7 +102,7 @@ namespace PhoneBook.Desktop.Services
         {
             if (!string.IsNullOrWhiteSpace(Token))
             {
-                if (new JwtSecurityToken(Token).Claims.Contains(new Claim("admin_access", "true")))
+                if (new JwtSecurityToken(Token).Claims.Contains(new Claim("admin_access", "true"), new ClaimsComparer()))
                 {
                     return UserRoles.Admin;
                 } else

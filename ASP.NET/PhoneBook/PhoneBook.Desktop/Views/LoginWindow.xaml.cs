@@ -7,6 +7,7 @@ namespace PhoneBook.Desktop.Views
     {
         public LoginWindow(LoginWindowViewModel loginWindowViewModel)
         {
+            Owner = Application.Current.MainWindow;
             DataContext = loginWindowViewModel;
             InitializeComponent();
         }

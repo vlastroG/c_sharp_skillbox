@@ -7,6 +7,7 @@ namespace PhoneBook.Desktop.Services
         internal static IServiceCollection AddServices(this IServiceCollection services) => services
             .AddHttpClient()
             .AddSingleton<AccountService>()
+            .AddSingleton<MessageBoxService>()
             ;
     }
 }

@@ -5,12 +5,42 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PhoneBook.Desktop"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         xmlns:vm="clr-namespace:PhoneBook.Desktop.ViewModels"
         Title="MainWindow"
         Height="450"
         Width="800"
-        d:DataContext="{d:DesignInstance vm:MainWindowViewModel, IsDesignTimeCreatable=True}">
+        d:DataContext="{d:DesignInstance vm:MainWindowViewModel, IsDesignTimeCreatable=False}"
+        WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <Style TargetType="Button"
+               x:Key="AnonButton"
+               BasedOn="{StaticResource MaterialDesignFlatMidBgButton}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Text, ElementName=UserName}"
+                             Value="{x:Static sys:String.Empty}">
+                    <Setter Property="Visibility"
+                            Value="Visible" />
+                </DataTrigger>
+            </Style.Triggers>
+            <Setter Property="Visibility"
+                    Value="Collapsed" />
+        </Style>
+        <Style TargetType="Button"
+               x:Key="NotAnonButton"
+               BasedOn="{StaticResource MaterialDesignFlatMidBgButton}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Text, ElementName=UserName}"
+                             Value="{x:Static sys:String.Empty}">
+                    <Setter Property="Visibility"
+                            Value="Collapsed" />
+                </DataTrigger>
+            </Style.Triggers>
+            <Setter Property="Visibility"
+                    Value="Visible" />
+        </Style>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="40" />
@@ -19,24 +49,55 @@
         <Grid Height="40"
               Grid.Row="0"
               Background="LightGray">
-            <StackPanel Orientation="Horizontal"
-                        HorizontalAlignment="Right"
-                        Margin="20 0">
-                <Button Content="Регистрация"
+            <DockPanel>
+                <Button Content="Обновить"
                         Background="{x:Null}"
                         BorderBrush="{x:Null}"
                         Foreground="#FFA2A2A2"
                         FontSize="15"
                         FontWeight="Bold"
-                        VerticalAlignment="Center" />
-                <Button Content="Вход"
-                        Background="{x:Null}"
-                        BorderBrush="{x:Null}"
-                        Foreground="#FFA2A2A2"
-                        FontSize="15"
-                        FontWeight="Bold"
-                        VerticalAlignment="Center" />
-            </StackPanel>
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center" 
+                        Command="{Binding UpdateCommand}"/>
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Right"
+                            Margin="20 0">
+                    <Button Content="Регистрация"
+                            Background="{x:Null}"
+                            BorderBrush="{x:Null}"
+                            Foreground="#FFA2A2A2"
+                            FontSize="15"
+                            FontWeight="Bold"
+                            VerticalAlignment="Center"
+                            Style="{StaticResource AnonButton}"
+                            Command="{Binding RegisterCommand}"/>
+                    <Button Content="Вход"
+                            Background="{x:Null}"
+                            BorderBrush="{x:Null}"
+                            Foreground="#FFA2A2A2"
+                            FontSize="15"
+                            FontWeight="Bold"
+                            VerticalAlignment="Center"
+                            Style="{StaticResource AnonButton}"
+                            Command="{Binding LoginCommand}" />
+                    <TextBlock Text="{Binding UserName}"
+                               x:Name="UserName"
+                               Background="{x:Null}"
+                               Foreground="#FFA2A2A2"
+                               FontSize="15"
+                               FontWeight="Bold"
+                               VerticalAlignment="Center" />
+                    <Button Content="Выход"
+                            Background="{x:Null}"
+                            BorderBrush="{x:Null}"
+                            Foreground="#FFA2A2A2"
+                            FontSize="15"
+                            FontWeight="Bold"
+                            VerticalAlignment="Center"
+                            Style="{StaticResource NotAnonButton}"
+                            Command="{Binding LogoutCommand}" />
+                </StackPanel>
+            </DockPanel>
         </Grid>
         <ContentControl Grid.Row="1"
                         Foreground="Black"

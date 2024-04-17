@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\PhoneBook.Exceptions\PhoneBook.Exceptions.csproj" />
     <ProjectReference Include="..\PhoneBook.Models\PhoneBook.Models.csproj" />
   </ItemGroup>
 
