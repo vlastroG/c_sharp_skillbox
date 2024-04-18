@@ -6,6 +6,7 @@ namespace PhoneBook.Desktop.Views
     {
         public ContactEditionWindow()
         {
+            Owner = Application.Current.MainWindow;
             InitializeComponent();
         }
     }

@@ -9,11 +9,5 @@ namespace PhoneBook.Desktop.ViewModels
             MessageBoxService messageBoxService) : base(contactsRepository, messageBoxService)
         {
         }
-
-
-        /// <summary>
-        /// debug constructor
-        /// </summary>
-        public AnonymMainViewModel() : base() { }
     }
 }

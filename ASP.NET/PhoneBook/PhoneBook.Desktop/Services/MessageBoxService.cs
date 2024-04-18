@@ -30,5 +30,15 @@ namespace PhoneBook.Desktop.Services
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
         }
+
+        public bool ConfirmWarning(string message, string title)
+        {
+            return MessageBox.Show(
+                Application.Current.MainWindow,
+                message,
+                title,
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning) == MessageBoxResult.Yes;
+        }
     }
 }

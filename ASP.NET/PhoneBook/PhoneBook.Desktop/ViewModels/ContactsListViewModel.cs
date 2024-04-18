@@ -22,14 +22,6 @@ namespace PhoneBook.Desktop.ViewModels
             ShowDetailsCommand = new LambdaCommand(ShowDetails, CanShowDetails);
         }
 
-        /// <summary>
-        /// debug constructor
-        /// </summary>
-        protected ContactsListViewModel()
-        {
-            Contacts = new ObservableCollection<Contact>() { new Contact() };
-        }
-
 
         public ObservableCollection<Contact> Contacts { get; }
 

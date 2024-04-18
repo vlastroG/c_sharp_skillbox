@@ -10,6 +10,7 @@ namespace PhoneBook.Desktop.ViewModels
             .AddTransient<UserMainViewModel>()
             .AddTransient<AdminMainViewModel>()
             .AddTransient<ContactCreationWindowViewModel>()
+            .AddTransient<ContactEditionWindowViewModel>()
             ;
     }
 }

@@ -20,12 +20,6 @@ namespace PhoneBook.Desktop.ViewModels
         public ICommand CreateContactCommand { get; }
 
 
-        /// <summary>
-        /// debug constructor
-        /// </summary>
-        public UserMainViewModel() : base() { }
-
-
         private async Task CreateContact(object? p)
         {
             var window = _serviceProvider.GetRequiredService<ContactCreationWindow>();
