@@ -22,9 +22,9 @@ namespace PhoneBook.Desktop.ViewModels
             _selectedViewModel = _serviceProvider.GetRequiredService<AnonymMainViewModel>();
 
             LoginCommand = new LambdaCommandAsync(Login, CanLogin);
-            LogoutCommand = new LambdaCommand(Logout, CanLogout);
+            LogoutCommand = new LambdaCommandAsync(Logout, CanLogout);
             RegisterCommand = new LambdaCommandAsync(Register, CanRegister);
-            UpdateCommand = new LambdaCommand(Update, CanUpdate);
+            UpdateCommand = new LambdaCommandAsync(Update, CanUpdate);
         }
 
 
@@ -113,11 +113,11 @@ namespace PhoneBook.Desktop.ViewModels
         }
 
 
-        private bool CanLogout(object p) => true;
-        private void Logout(object p)
+        private bool CanLogout(object? p) => true;
+        private async Task Logout(object? p)
         {
             _accountService.Logout();
-            UpdateWindow();
+            await UpdateWindow();
         }
 
         private bool CanRegister(object? p) =>
@@ -168,7 +168,7 @@ namespace PhoneBook.Desktop.ViewModels
         }
 
 
-        private void UpdateWindow()
+        private async Task UpdateWindow()
         {
             UserName = _accountService.GetUserName();
             switch (_accountService.GetUserRole())
@@ -180,15 +180,20 @@ namespace PhoneBook.Desktop.ViewModels
                     SelectedViewModel = _serviceProvider.GetRequiredService<UserMainViewModel>();
                     break;
                 default:
-                    SelectedViewModel = _serviceProvider.GetRequiredService<AnonymMainViewModel>();
+                    var anonModel = _serviceProvider.GetRequiredService<AnonymMainViewModel>();
+                    await anonModel.Update();
+                    SelectedViewModel = anonModel;
                     break;
             }
         }
-        private bool CanUpdate(object p) => true;
-        private void Update(object p)
+
+        private bool CanUpdate(object? p) => true;
+        private async Task Update(object? p)
         {
+            CommandExecuting = true;
             Email = string.Empty;
-            UpdateWindow();
+            await UpdateWindow();
+            CommandExecuting = false;
         }
     }
 }

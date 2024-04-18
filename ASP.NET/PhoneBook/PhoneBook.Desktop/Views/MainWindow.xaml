@@ -6,15 +6,22 @@
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:local="clr-namespace:PhoneBook.Desktop"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:vm="clr-namespace:PhoneBook.Desktop.ViewModels"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:helpers="clr-namespace:PhoneBook.Desktop.Helpers"
         mc:Ignorable="d"
-        xmlns:vm="clr-namespace:PhoneBook.Desktop.ViewModels"
         Title="MainWindow"
         Height="450"
         Width="800"
+        MinHeight="350"
+        MinWidth="500"
         d:DataContext="{d:DesignInstance vm:MainWindowViewModel, IsDesignTimeCreatable=False}"
         WindowStartupLocation="CenterScreen">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding UpdateCommand}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
     <Window.Resources>
         <Style TargetType="Button"
                x:Key="AnonButton"
@@ -129,7 +136,7 @@
                         VerticalAlignment="Bottom"
                         Margin="25">
 
-                <TextBox materialDesign:HintAssist.Hint="email"
+                <TextBox materialDesign:HintAssist.Hint="example@example.com"
                          HorizontalContentAlignment="Center"
                          IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.CommandExecuting, Converter={StaticResource InvertBooleanConverter}}"
                          Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.Email}">
@@ -141,7 +148,7 @@
                     </TextBox.Resources>
                 </TextBox>
                 <PasswordBox x:Name="PasswordBox"
-                             materialDesign:HintAssist.Hint="пароль"
+                             materialDesign:HintAssist.Hint="пароль (от 8 символов)"
                              Margin="0 25"
                              HorizontalContentAlignment="Center"
                              IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.CommandExecuting, Converter={StaticResource InvertBooleanConverter}}">
@@ -181,7 +188,7 @@
     </Window.Resources>
 
     <materialDesign:DialogHost Identifier="RootDialog">
-        <Grid>
+        <Grid Background="WhiteSmoke">
             <Grid.RowDefinitions>
                 <RowDefinition Height="40" />
                 <RowDefinition />
@@ -193,7 +200,7 @@
                     <Button Content="Обновить"
                             Background="{x:Null}"
                             BorderBrush="{x:Null}"
-                            Foreground="#FFA2A2A2"
+                            Foreground="DarkSlateGray"
                             FontSize="15"
                             FontWeight="Bold"
                             HorizontalAlignment="Left"
@@ -206,7 +213,7 @@
                         <Button Content="Регистрация"
                                 Background="{x:Null}"
                                 BorderBrush="{x:Null}"
-                                Foreground="#FFA2A2A2"
+                                Foreground="DarkSlateGray"
                                 FontSize="15"
                                 FontWeight="Bold"
                                 VerticalAlignment="Center"
@@ -219,7 +226,7 @@
                         <Button Content="Вход"
                                 Background="{x:Null}"
                                 BorderBrush="{x:Null}"
-                                Foreground="#FFA2A2A2"
+                                Foreground="DarkSlateGray"
                                 FontSize="15"
                                 FontWeight="Bold"
                                 VerticalAlignment="Center"
@@ -232,14 +239,14 @@
                         <TextBlock Text="{Binding UserName}"
                                    x:Name="UserName"
                                    Background="{x:Null}"
-                                   Foreground="#FFA2A2A2"
+                                   Foreground="DarkSlateGray"
                                    FontSize="15"
                                    FontWeight="Bold"
                                    VerticalAlignment="Center" />
                         <Button Content="Выход"
                                 Background="{x:Null}"
                                 BorderBrush="{x:Null}"
-                                Foreground="#FFA2A2A2"
+                                Foreground="DarkSlateGray"
                                 FontSize="15"
                                 FontWeight="Bold"
                                 VerticalAlignment="Center"
@@ -249,7 +256,6 @@
                 </DockPanel>
             </Grid>
             <ContentControl Grid.Row="1"
-                            Foreground="Black"
                             Content="{
             Binding SelectedViewModel, 
             UpdateSourceTrigger=PropertyChanged, 

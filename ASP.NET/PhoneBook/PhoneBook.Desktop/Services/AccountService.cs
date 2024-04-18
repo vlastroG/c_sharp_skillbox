@@ -24,8 +24,15 @@ namespace PhoneBook.Desktop.Services
         public string Token { get; private set; }
 
 
+        /// <exception cref="ServerNotResponseException"></exception>
         public async Task<bool> Login(string email, PasswordBox passwordBox)
         {
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                throw new ArgumentException($"'{nameof(email)}' cannot be null or whitespace.", nameof(email));
+            }
+            if (passwordBox is null) { throw new ArgumentNullException(nameof(passwordBox)); }
+
             using HttpClient httpClient = _httpClientFactory.CreateClient();
 
             var builder = new UriBuilder(Helpers.Constants.LoginUri);
@@ -63,8 +70,15 @@ namespace PhoneBook.Desktop.Services
         }
 
 
+        /// <exception cref="ServerNotResponseException"></exception>
         public async Task<bool> Register(string email, PasswordBox passwordBox)
         {
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                throw new ArgumentException($"'{nameof(email)}' cannot be null or whitespace.", nameof(email));
+            }
+            if (passwordBox is null) { throw new ArgumentNullException(nameof(passwordBox)); }
+
             using HttpClient httpClient = _httpClientFactory.CreateClient();
 
             var builder = new UriBuilder(Helpers.Constants.RegisterUri);

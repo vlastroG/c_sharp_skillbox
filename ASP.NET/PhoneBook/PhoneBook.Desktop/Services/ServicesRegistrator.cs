@@ -8,6 +8,7 @@ namespace PhoneBook.Desktop.Services
             .AddHttpClient()
             .AddSingleton<AccountService>()
             .AddSingleton<MessageBoxService>()
+            .AddSingleton<ContactsRepository>()
             ;
     }
 }
