@@ -2,6 +2,9 @@
 using PhoneBook.Desktop.Commands;
 using PhoneBook.Desktop.Services;
 using PhoneBook.Desktop.Views;
+using PhoneBook.Exceptions;
+using System.ComponentModel.DataAnnotations;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace PhoneBook.Desktop.ViewModels
@@ -10,15 +13,16 @@ namespace PhoneBook.Desktop.ViewModels
     {
         private readonly AccountService _accountService;
         private readonly IServiceProvider _serviceProvider;
+        private readonly MessageBoxService _messageBoxService;
 
-        public MainWindowViewModel(AccountService accountService, IServiceProvider serviceProvider)
+        public MainWindowViewModel(AccountService accountService, IServiceProvider serviceProvider, MessageBoxService messageBoxService)
         {
             _accountService = accountService ?? throw new ArgumentNullException(nameof(accountService));
             _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
-
+            _messageBoxService = messageBoxService ?? throw new ArgumentNullException(nameof(messageBoxService));
             _selectedViewModel = _serviceProvider.GetRequiredService<AnonymMainViewModel>();
 
-            LoginCommand = new LambdaCommand(Login, CanLogin);
+            LoginCommand = new LambdaCommandAsync(Login, CanLogin);
             LogoutCommand = new LambdaCommand(Logout, CanLogout);
             RegisterCommand = new LambdaCommand(Register, CanRegister);
             UpdateCommand = new LambdaCommand(Update, CanUpdate);
@@ -52,15 +56,61 @@ namespace PhoneBook.Desktop.ViewModels
         public ICommand UpdateCommand { get; }
 
 
-
-        private bool CanLogin(object p) => true;
-
-        private void Login(object p)
+        private string? _email;
+        [EmailAddress]
+        public string? Email
         {
-            var window = _serviceProvider.GetRequiredService<LoginWindow>();
-            window.ShowDialog();
+            get => _email;
+            set => Set(ref _email, value);
+        }
 
-            UpdateWindow();
+
+        private bool _commandExecuting = false;
+        public bool CommandExecuting
+        {
+            get => _commandExecuting;
+            set => Set(ref _commandExecuting, value);
+        }
+
+
+        private bool CanLogin(object? parameter) =>
+            !string.IsNullOrWhiteSpace(Email)
+            && parameter is not null
+            && parameter is PasswordBox;
+
+        private async Task Login(object? parameter)
+        {
+            bool result = false;
+            PasswordBox passwordBox = (parameter as PasswordBox)!;
+            try
+            {
+                CommandExecuting = true;
+                result = await _accountService.Login(Email!, passwordBox);
+            } catch (ServerNotResponseException)
+            {
+                _messageBoxService.ShowError(
+                    "Сервер не отвечает",
+                    "Статус входа");
+                return;
+            }
+            finally
+            {
+                passwordBox.Password = string.Empty;
+                Email = string.Empty;
+                CommandExecuting = false;
+            }
+
+            if (result)
+            {
+                _messageBoxService.ShowInfo(
+                    "Вход успешно выполнен, можете закрыть окно",
+                    "Статус входа");
+            } else
+            {
+                _messageBoxService.ShowError(
+                    "Неверный логин пользователя или пароль",
+                    "Статус входа");
+            }
         }
 
 
