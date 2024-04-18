@@ -1,5 +1,6 @@
 ﻿using PhoneBook.Desktop.Commands;
 using PhoneBook.Desktop.Services;
+using PhoneBook.Desktop.Views;
 using PhoneBook.Exceptions;
 using PhoneBook.Models;
 using System.Collections.ObjectModel;
@@ -12,13 +13,15 @@ namespace PhoneBook.Desktop.ViewModels
         private readonly ContactsRepository _contactsRepository;
         private readonly MessageBoxService _messageBoxService;
 
-        public AnonymMainViewModel(ContactsRepository contactsRepository, MessageBoxService messageBoxService)
+        public AnonymMainViewModel(
+            ContactsRepository contactsRepository,
+            MessageBoxService messageBoxService)
         {
             _contactsRepository = contactsRepository ?? throw new ArgumentNullException(nameof(contactsRepository));
             _messageBoxService = messageBoxService ?? throw new ArgumentNullException(nameof(messageBoxService));
             Contacts = new ObservableCollection<Contact>();
 
-            ShowDetailsCommand = new LambdaCommandAsync(ShowDetails, CanShowDetails);
+            ShowDetailsCommand = new LambdaCommand(ShowDetails, CanShowDetails);
         }
 
 
@@ -65,9 +68,11 @@ namespace PhoneBook.Desktop.ViewModels
         }
 
 
-        private async Task ShowDetails(object? p)
+        private void ShowDetails(object? p)
         {
-
+            Contact contact = (p as Contact)!;
+            var window = new ContactDetailsWindow(contact);
+            window.ShowDialog();
         }
 
         private bool CanShowDetails(object? p) => p is not null && p is Contact;

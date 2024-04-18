@@ -4,9 +4,64 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PhoneBook.Desktop.Views"
+        xmlns:vm="clr-namespace:PhoneBook.Desktop.ViewModels"
+        xmlns:models="clr-namespace:PhoneBook.Models;assembly=PhoneBook.Models"
         mc:Ignorable="d"
-        Title="ContactDetailsWindow" Height="450" Width="800">
+        Title="Подробная информация"
+        MinHeight="230"
+        MinWidth="400"
+        Height="230"
+        Width="400"
+        d:DataContext="{d:DesignInstance models:Contact, IsDesignTimeCreatable=True}"
+        WindowStartupLocation="CenterOwner">
     <Grid>
-        
+        <Grid.Resources>
+            <Style TargetType="TextBlock"
+                   x:Key="Value"
+                   BasedOn="{StaticResource MaterialDesignTextBlock}">
+                <Setter Property="FontSize"
+                        Value="15" />
+                <Setter Property="HorizontalAlignment"
+                        Value="Left" />
+                <Setter Property="VerticalAlignment"
+                        Value="Center" />
+                <Setter Property="Height"
+                        Value="Auto" />
+            </Style>
+            <Style TargetType="TextBlock"
+                   x:Key="Header"
+                   BasedOn="{StaticResource Value}">
+                <Setter Property="FontWeight"
+                        Value="DemiBold" />
+            </Style>
+        </Grid.Resources>
+        <UniformGrid Margin="25"
+                     Columns="2"
+                     VerticalAlignment="Top">
+            <TextBlock Text="Фамилия"
+                       Style="{StaticResource Header}" />
+            <TextBlock Text="{Binding Surname}"
+                       Style="{StaticResource Value}" />
+            <TextBlock Text="Имя"
+                       Style="{StaticResource Header}" />
+            <TextBlock Text="{Binding Name}"
+                       Style="{StaticResource Value}" />
+            <TextBlock Text="Отчество"
+                       Style="{StaticResource Header}" />
+            <TextBlock Text="{Binding Patronymic}"
+                       Style="{StaticResource Value}" />
+            <TextBlock Text="Телефон"
+                       Style="{StaticResource Header}" />
+            <TextBlock Text="{Binding PhoneNumber}"
+                       Style="{StaticResource Value}" />
+            <TextBlock Text="Адрес"
+                       Style="{StaticResource Header}" />
+            <TextBlock Text="{Binding Address}"
+                       Style="{StaticResource Value}" />
+            <TextBlock Text="Описание"
+                       Style="{StaticResource Header}" />
+            <TextBlock Text="{Binding Description}"
+                       Style="{StaticResource Value}" />
+        </UniformGrid>
     </Grid>
 </Window>

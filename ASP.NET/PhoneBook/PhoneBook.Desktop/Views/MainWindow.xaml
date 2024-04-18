@@ -217,6 +217,7 @@
                                 FontSize="15"
                                 FontWeight="Bold"
                                 VerticalAlignment="Center"
+                                IsEnabled="{Binding CommandExecuting, Converter={StaticResource InvertBooleanConverter}}"
                                 Style="{StaticResource AnonButton}"
                                 Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}">
                             <Button.CommandParameter>
@@ -230,6 +231,7 @@
                                 FontSize="15"
                                 FontWeight="Bold"
                                 VerticalAlignment="Center"
+                                IsEnabled="{Binding CommandExecuting, Converter={StaticResource InvertBooleanConverter}}"
                                 Style="{StaticResource AnonButton}"
                                 Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}">
                             <Button.CommandParameter>
@@ -250,6 +252,7 @@
                                 FontSize="15"
                                 FontWeight="Bold"
                                 VerticalAlignment="Center"
+                                IsEnabled="{Binding CommandExecuting, Converter={StaticResource InvertBooleanConverter}}"
                                 Style="{StaticResource NotAnonButton}"
                                 Command="{Binding LogoutCommand}" />
                     </StackPanel>
