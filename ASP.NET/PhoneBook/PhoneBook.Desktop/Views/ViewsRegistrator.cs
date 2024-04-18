@@ -6,8 +6,6 @@ namespace PhoneBook.Desktop.Views
     {
         public static IServiceCollection AddViews(this IServiceCollection services) => services
             .AddSingleton<MainWindow>()
-            .AddTransient<LoginWindow>()
-            .AddTransient<RegisterWindow>()
             .AddTransient<AnonymMainView>()
             .AddTransient<UserMainView>()
             .AddTransient<AdminMainView>()

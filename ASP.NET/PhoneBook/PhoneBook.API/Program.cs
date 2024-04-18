@@ -18,7 +18,12 @@ namespace PhoneBook.API
 
             builder.Services.AddIdentityCore<ApplicationUser>(o =>
             {
+                o.Password.RequireDigit = false;
                 o.Password.RequiredLength = 8;
+                o.Password.RequireLowercase = false;
+                o.Password.RequireNonAlphanumeric = false;
+                o.Password.RequireUppercase = false;
+
                 o.SignIn.RequireConfirmedAccount = false;
                 o.SignIn.RequireConfirmedEmail = false;
                 o.SignIn.RequireConfirmedPhoneNumber = false;

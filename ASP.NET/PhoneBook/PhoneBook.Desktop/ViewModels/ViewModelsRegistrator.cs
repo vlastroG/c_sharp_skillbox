@@ -6,8 +6,6 @@ namespace PhoneBook.Desktop.ViewModels
     {
         public static IServiceCollection AddViewModels(this IServiceCollection services) => services
             .AddSingleton<MainWindowViewModel>()
-            .AddTransient<LoginWindowViewModel>()
-            .AddTransient<RegisterWindowViewModel>()
             .AddTransient<AnonymMainViewModel>()
             .AddTransient<UserMainViewModel>()
             .AddTransient<AdminMainViewModel>()

@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using PhoneBook.Desktop.Commands;
 using PhoneBook.Desktop.Services;
-using PhoneBook.Desktop.Views;
 using PhoneBook.Exceptions;
 using System.ComponentModel.DataAnnotations;
 using System.Windows.Controls;
@@ -24,7 +23,7 @@ namespace PhoneBook.Desktop.ViewModels
 
             LoginCommand = new LambdaCommandAsync(Login, CanLogin);
             LogoutCommand = new LambdaCommand(Logout, CanLogout);
-            RegisterCommand = new LambdaCommand(Register, CanRegister);
+            RegisterCommand = new LambdaCommandAsync(Register, CanRegister);
             UpdateCommand = new LambdaCommand(Update, CanUpdate);
         }
 
@@ -121,13 +120,51 @@ namespace PhoneBook.Desktop.ViewModels
             UpdateWindow();
         }
 
-        private bool CanRegister(object p) => true;
-        private void Register(object p)
-        {
-            var window = _serviceProvider.GetRequiredService<RegisterWindow>();
-            window.ShowDialog();
+        private bool CanRegister(object? p) =>
+            !string.IsNullOrWhiteSpace(Email)
+            && p is not null
+            && p is PasswordBox
+            ;
 
-            UpdateWindow();
+        private async Task Register(object? p)
+        {
+            PasswordBox passwordBox = (p as PasswordBox)!;
+            if (passwordBox.Password.Length < 8)
+            {
+                _messageBoxService.ShowError("Пароль должен быть не менее 8 символов", "Статус регистрации");
+                return;
+            }
+
+            bool result = false;
+            try
+            {
+                CommandExecuting = true;
+                result = await _accountService.Register(Email!, passwordBox);
+            } catch (ServerNotResponseException)
+            {
+                _messageBoxService.ShowError(
+                    "Сервер не отвечает",
+                    "Статус регистрации");
+                return;
+            }
+            finally
+            {
+                passwordBox.Password = string.Empty;
+                Email = string.Empty;
+                CommandExecuting = false;
+            }
+
+            if (result)
+            {
+                _messageBoxService.ShowInfo(
+                    $"Пользователь {Email} успешно зарегистрирован, можете закрыть окно",
+                    "Статус регистрации");
+            } else
+            {
+                _messageBoxService.ShowError(
+                    $"Не удалось зарегистрировать пользователя {Email}",
+                    "Статус регистрации");
+            }
         }
 
 
@@ -150,6 +187,7 @@ namespace PhoneBook.Desktop.ViewModels
         private bool CanUpdate(object p) => true;
         private void Update(object p)
         {
+            Email = string.Empty;
             UpdateWindow();
         }
     }

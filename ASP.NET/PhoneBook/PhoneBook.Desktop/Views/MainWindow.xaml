@@ -67,6 +67,7 @@
             </Style.Triggers>
         </Style>
 
+        <!--Диалоговое окно входа-->
         <DataTemplate DataType="{x:Type helpers:LoginPopup}">
             <StackPanel Width="350"
                         VerticalAlignment="Bottom"
@@ -84,7 +85,7 @@
                     </TextBox.Resources>
                 </TextBox>
                 <PasswordBox x:Name="PasswordBox"
-                             materialDesign:HintAssist.Hint="password"
+                             materialDesign:HintAssist.Hint="пароль"
                              Margin="0 25"
                              HorizontalContentAlignment="Center"
                              IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.CommandExecuting, Converter={StaticResource InvertBooleanConverter}}">
@@ -110,7 +111,7 @@
                             IsDefault="True" />
                     <Button  Margin="0 5 0 0"
                              Content="Закрыть"
-                             IsDefault="True">
+                             IsCancel="True">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="Click">
                                 <i:InvokeCommandAction Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" />
@@ -122,16 +123,59 @@
             </StackPanel>
         </DataTemplate>
 
+        <!--Диалоговое окно регистрации-->
         <DataTemplate DataType="{x:Type helpers:RegisterPopup}">
-            <StackPanel Height="300"
-                        Width="300">
+            <StackPanel Width="350"
+                        VerticalAlignment="Bottom"
+                        Margin="25">
 
-                <Button Content="Register" />
-                <Button  Margin="50"
-                         Content="Закрыть"
-                         IsDefault="True"
-                         Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"
-                         Style="{DynamicResource MaterialDesignRaisedDarkButton}"></Button>
+                <TextBox materialDesign:HintAssist.Hint="email"
+                         HorizontalContentAlignment="Center"
+                         IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.CommandExecuting, Converter={StaticResource InvertBooleanConverter}}"
+                         Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.Email}">
+                    <TextBox.Resources>
+                        <Style TargetType="{x:Type materialDesign:SmartHint}">
+                            <Setter Property="HorizontalAlignment"
+                                    Value="Center" />
+                        </Style>
+                    </TextBox.Resources>
+                </TextBox>
+                <PasswordBox x:Name="PasswordBox"
+                             materialDesign:HintAssist.Hint="пароль"
+                             Margin="0 25"
+                             HorizontalContentAlignment="Center"
+                             IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.CommandExecuting, Converter={StaticResource InvertBooleanConverter}}">
+                    <PasswordBox.Resources>
+                        <Style TargetType="{x:Type materialDesign:SmartHint}">
+                            <Setter Property="HorizontalAlignment"
+                                    Value="Center" />
+                        </Style>
+                    </PasswordBox.Resources>
+                </PasswordBox>
+                <DockPanel Style="{StaticResource SpinnerContainer}"
+                           Height="65">
+                    <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}"
+                                 IsIndeterminate="True"
+                                 VerticalAlignment="Center"
+                                 Height="50"
+                                 Width="50" />
+                </DockPanel>
+                <StackPanel Style="{StaticResource ButtonsContainer}">
+                    <Button Content="Зарегистрироваться"
+                            Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.RegisterCommand}"
+                            CommandParameter="{Binding ElementName=PasswordBox}"
+                            IsDefault="True" />
+                    <Button  Margin="0 5 0 0"
+                             Content="Закрыть"
+                             IsCancel="True">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <i:InvokeCommandAction Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" />
+                                <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.UpdateCommand}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </Button>
+                </StackPanel>
             </StackPanel>
         </DataTemplate>
     </Window.Resources>
