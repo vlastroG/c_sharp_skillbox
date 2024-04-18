@@ -174,10 +174,14 @@ namespace PhoneBook.Desktop.ViewModels
             switch (_accountService.GetUserRole())
             {
                 case UserRoles.Admin:
-                    SelectedViewModel = _serviceProvider.GetRequiredService<AdminMainViewModel>();
+                    var adminModel = _serviceProvider.GetRequiredService<AdminMainViewModel>();
+                    await adminModel.Update();
+                    SelectedViewModel = adminModel;
                     break;
                 case UserRoles.User:
-                    SelectedViewModel = _serviceProvider.GetRequiredService<UserMainViewModel>();
+                    var userModel = _serviceProvider.GetRequiredService<UserMainViewModel>();
+                    await userModel.Update();
+                    SelectedViewModel = userModel;
                     break;
                 default:
                     var anonModel = _serviceProvider.GetRequiredService<AnonymMainViewModel>();

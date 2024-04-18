@@ -79,6 +79,8 @@
                                     FontWeight="Bold"
                                     Background="{x:Null}"
                                     BorderBrush="{x:Null}"
+                                    Foreground="Black"
+                                    Style="{StaticResource MaterialDesignFlatDarkButton}"
                                     Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.ShowDetailsCommand}"
                                     CommandParameter="{Binding}" />
                         </DataTemplate>

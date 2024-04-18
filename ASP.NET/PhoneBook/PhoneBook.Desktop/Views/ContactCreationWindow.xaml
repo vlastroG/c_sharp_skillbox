@@ -4,9 +4,119 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PhoneBook.Desktop.Views"
+        xmlns:vm="clr-namespace:PhoneBook.Desktop.ViewModels"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:models="clr-namespace:PhoneBook.Models;assembly=PhoneBook.Models"
         mc:Ignorable="d"
-        Title="ContactCreationWindow" Height="450" Width="800">
+        Title="Добавление контакта"
+        MinHeight="320"
+        MinWidth="400"
+        Height="320"
+        Width="400"
+        d:DataContext="{d:DesignInstance vm:ContactCreationWindowViewModel, IsDesignTimeCreatable=False}"
+        WindowStartupLocation="CenterOwner">
     <Grid>
-        
+        <Grid.Resources>
+            <Style TargetType="TextBlock"
+                   x:Key="Header"
+                   BasedOn="{StaticResource MaterialDesignTextBlock}">
+                <Setter Property="FontSize"
+                        Value="15" />
+                <Setter Property="HorizontalAlignment"
+                        Value="Left" />
+                <Setter Property="VerticalAlignment"
+                        Value="Center" />
+                <Setter Property="Height"
+                        Value="Auto" />
+                <Setter Property="FontWeight"
+                        Value="DemiBold" />
+            </Style>
+            <Style TargetType="TextBox"
+                   x:Key="Value"
+                   BasedOn="{StaticResource MaterialDesignTextBox}">
+                <Setter Property="FontSize"
+                        Value="15" />
+                <Setter Property="VerticalAlignment"
+                        Value="Center" />
+                <Setter Property="Height"
+                        Value="Auto" />
+                <Setter Property="FontWeight"
+                        Value="DemiBold" />
+            </Style>
+            <Style TargetType="DockPanel"
+                   x:Key="SpinnerContainer">
+                <Setter Property="Visibility"
+                        Value="Collapsed" />
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.CommandExecuting}"
+                                 Value="True">
+                        <Setter Property="Visibility"
+                                Value="Visible" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+            <Style TargetType="StackPanel"
+                   x:Key="ButtonsContainer">
+                <Setter Property="Visibility"
+                        Value="Visible" />
+                <Setter Property="VerticalAlignment"
+                        Value="Center" />
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.CommandExecuting}"
+                                 Value="True">
+                        <Setter Property="Visibility"
+                                Value="Collapsed" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </Grid.Resources>
+        <DockPanel Margin="25">
+
+            <UniformGrid Columns="2"
+                         Margin="0 0 0 25"
+                         VerticalAlignment="Top"
+                         DockPanel.Dock="Top">
+                <TextBlock Text="Фамилия"
+                           Style="{StaticResource Header}" />
+                <TextBox Text="{Binding Surname, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"
+                         Style="{StaticResource Value}" />
+                <TextBlock Text="Имя"
+                           Style="{StaticResource Header}" />
+                <TextBox Text="{Binding Name}"
+                         Style="{StaticResource Value}" />
+                <TextBlock Text="Отчество"
+                           Style="{StaticResource Header}" />
+                <TextBox Text="{Binding Patronymic}"
+                         Style="{StaticResource Value}" />
+                <TextBlock Text="Телефон"
+                           Style="{StaticResource Header}" />
+                <TextBox Text="{Binding PhoneNumber}"
+                         Style="{StaticResource Value}" />
+                <TextBlock Text="Адрес"
+                           Style="{StaticResource Header}" />
+                <TextBox Text="{Binding Address}"
+                         Style="{StaticResource Value}" />
+                <TextBlock Text="Описание"
+                           Style="{StaticResource Header}" />
+                <TextBox Text="{Binding Description}"
+                         Style="{StaticResource Value}" />
+            </UniformGrid>
+            <DockPanel Style="{StaticResource SpinnerContainer}"
+                       Height="25"
+                       VerticalAlignment="Bottom"
+                       HorizontalAlignment="Center">
+                <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}"
+                             IsIndeterminate="True"
+                             VerticalAlignment="Center"
+                             Height="20"
+                             Width="20" />
+            </DockPanel>
+            <StackPanel Style="{StaticResource ButtonsContainer}"
+                        VerticalAlignment="Bottom">
+                <Button Content="Создать"
+                        Command="{Binding CreateContactCommand}"
+                        IsDefault="True" />
+            </StackPanel>
+        </DockPanel>
     </Grid>
 </Window>

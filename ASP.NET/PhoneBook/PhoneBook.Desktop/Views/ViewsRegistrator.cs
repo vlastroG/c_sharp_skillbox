@@ -9,6 +9,7 @@ namespace PhoneBook.Desktop.Views
             .AddTransient<AnonymMainView>()
             .AddTransient<UserMainView>()
             .AddTransient<AdminMainView>()
+            .AddTransient<ContactCreationWindow>()
             ;
     }
 }

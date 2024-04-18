@@ -4,13 +4,102 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:PhoneBook.Desktop.Views"
+             xmlns:vm="clr-namespace:PhoneBook.Desktop.ViewModels"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              mc:Ignorable="d"
              d:DesignHeight="450"
-             d:DesignWidth="800">
+             d:DesignWidth="800"
+             Background="WhiteSmoke"
+             d:DataContext="{d:DesignInstance vm:UserMainViewModel, IsDesignTimeCreatable=True}">
     <Grid>
-        <TextBlock Text="User content"
-                   Foreground="Black"
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Center" />
+        <StackPanel>
+            <Button Content="Создать новый контакт"
+                    Height="Auto"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    FontWeight="Bold"
+                    Background="{x:Null}"
+                    BorderBrush="{x:Null}"
+                    Foreground="Black"
+                    Command="{Binding CreateContactCommand}" 
+                    Style="{StaticResource MaterialDesignFlatDarkButton}"/>
+            <DataGrid IsReadOnly="True"
+                      ItemsSource="{Binding Contacts}"
+                      AutoGenerateColumns="False"
+                      CanUserAddRows="False"
+                      CanUserDeleteRows="False"
+                      Background="WhiteSmoke"
+                      EnableRowVirtualization="True"
+                      EnableColumnVirtualization="True"
+                      VirtualizingPanel.IsVirtualizingWhenGrouping="True"
+                      VirtualizingPanel.VirtualizationMode="Recycling"
+                      VirtualizingPanel.IsVirtualizing="True"
+                      SelectionMode="Single"
+                      ScrollViewer.CanContentScroll="True">
+                <DataGrid.Resources>
+                    <Style TargetType="TextBlock"
+                           x:Key="TextCellStyle">
+                        <Setter Property="VerticalAlignment"
+                                Value="Center" />
+                    </Style>
+                </DataGrid.Resources>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Id"
+                                        Binding="{Binding Id}"
+                                        Width="50">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock"
+                                   BasedOn="{StaticResource TextCellStyle}">
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="Фамилия"
+                                        Width="1*"
+                                        Binding="{Binding Surname}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock"
+                                   BasedOn="{StaticResource TextCellStyle}">
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="Имя"
+                                        Width="1*"
+                                        Binding="{Binding Name}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock"
+                                   BasedOn="{StaticResource TextCellStyle}">
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="Отчество"
+                                        Width="1*"
+                                        Binding="{Binding Patronymic}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock"
+                                   BasedOn="{StaticResource TextCellStyle}">
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTemplateColumn Width="1*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Content="Подробности"
+                                        Height="Auto"
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Center"
+                                        FontWeight="Bold"
+                                        Background="{x:Null}"
+                                        BorderBrush="{x:Null}"
+                                        Foreground="Black"
+                                        Style="{StaticResource MaterialDesignFlatDarkButton}"
+                                        Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.ShowDetailsCommand}"
+                                        CommandParameter="{Binding}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+
+            </DataGrid>
+        </StackPanel>
     </Grid>
 </UserControl>
