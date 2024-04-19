@@ -1,25 +1,28 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using PhoneBook.Data;
+using PhoneBook.Helpers;
 using PhoneBook.Models;
+using System.Net.Http.Headers;
 
 namespace PhoneBook.Controllers
 {
     public class ContactsController : Controller
     {
-        private readonly PhoneBookContext _context;
+        private readonly IHttpClientFactory _httpClientFactory;
 
-        public ContactsController(PhoneBookContext context)
+
+        public ContactsController(IHttpClientFactory httpClientFactory)
         {
-            context.Database.Migrate();
-            _context = context;
+            _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
         }
 
         // GET: Contacts
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Contact.ToListAsync());
+            using HttpClient client = _httpClientFactory.CreateClient();
+            var contacts = await client.GetFromJsonAsync<IEnumerable<Contact>>(Helpers.Constants.ContactsUri);
+
+            return View(contacts);
         }
 
         // GET: Contacts/Details/5
@@ -30,9 +33,8 @@ namespace PhoneBook.Controllers
             {
                 return NotFound();
             }
-
-            var contact = await _context.Contact
-                .FirstOrDefaultAsync(m => m.Id == id);
+            using HttpClient client = _httpClientFactory.CreateClient();
+            var contact = await client.GetFromJsonAsync<Contact>(Helpers.Constants.ContactsUri + id);
             if (contact == null)
             {
                 return NotFound();
@@ -45,7 +47,13 @@ namespace PhoneBook.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            return View();
+            if (HttpContext.Session.IsAuthorizedUser())
+            {
+                return View();
+            } else
+            {
+                return RedirectToLogin();
+            }
         }
 
         // POST: Contacts/Create
@@ -55,30 +63,54 @@ namespace PhoneBook.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Surname,Name,Patronymic,PhoneNumber,Address,Description")] Contact contact)
         {
-            if (ModelState.IsValid)
+            if (HttpContext.Session.IsAuthorizedUser())
             {
-                _context.Add(contact);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    using HttpClient client = _httpClientFactory.CreateClient();
+                    AddAuthenticationHeader(client);
+                    var response = await client.PutAsJsonAsync(Constants.ContactsUri + "Create", contact);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        return RedirectToAction(nameof(Index));
+                    } else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                    {
+                        return RedirectToLogin();
+                    } else
+                    {
+                        return BadRequest(response);
+                    }
+                }
+                return View(contact);
+            } else
+            {
+                return RedirectToLogin();
             }
-            return View(contact);
         }
 
         // GET: Contacts/Edit/5
         [HttpGet]
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
+            if (HttpContext.Session.IsAdminUser())
             {
-                return NotFound();
-            }
+                if (id == null)
+                {
+                    return NotFound();
+                }
 
-            var contact = await _context.Contact.FindAsync(id);
-            if (contact == null)
+                using HttpClient client = _httpClientFactory.CreateClient();
+                AddAuthenticationHeader(client);
+                var contact = await client.GetFromJsonAsync<Contact>(Constants.ContactsUri + id);
+                if (contact == null)
+                {
+                    return NotFound();
+                }
+                return View(contact);
+            } else
             {
-                return NotFound();
+                return RedirectToAccessDenied();
             }
-            return View(contact);
         }
 
         // POST: Contacts/Edit/5
@@ -88,49 +120,62 @@ namespace PhoneBook.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Surname,Name,Patronymic,PhoneNumber,Address,Description")] Contact contact)
         {
-            if (id != contact.Id)
+            if (HttpContext.Session.IsAdminUser())
             {
-                return NotFound();
-            }
+                if (id != contact.Id)
+                {
+                    return NotFound();
+                }
 
-            if (ModelState.IsValid)
-            {
-                try
+                if (ModelState.IsValid)
                 {
-                    _context.Update(contact);
-                    await _context.SaveChangesAsync();
-                } catch (DbUpdateConcurrencyException)
-                {
-                    if (!ContactExists(contact.Id))
+                    using HttpClient client = _httpClientFactory.CreateClient();
+                    AddAuthenticationHeader(client);
+                    var response = await client.PostAsJsonAsync(Constants.ContactsUri + $"Update/{id}", contact);
+                    if (response.IsSuccessStatusCode)
                     {
-                        return NotFound();
+                        return RedirectToAction(nameof(Index));
+                    } else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                    {
+                        return RedirectToLogin();
+                    } else if (response.StatusCode == System.Net.HttpStatusCode.Forbidden)
+                    {
+                        return RedirectToAccessDenied();
                     } else
                     {
-                        throw;
+                        return NotFound();
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return View(contact);
+            } else
+            {
+                return RedirectToAccessDenied();
             }
-            return View(contact);
         }
 
         // GET: Contacts/Delete/5
         [HttpGet]
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
+            if (HttpContext.Session.IsAdminUser())
             {
-                return NotFound();
-            }
+                if (id == null)
+                {
+                    return NotFound();
+                }
 
-            var contact = await _context.Contact
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (contact == null)
+                using HttpClient client = _httpClientFactory.CreateClient();
+                AddAuthenticationHeader(client);
+                var contact = await client.GetFromJsonAsync<Contact>(Constants.ContactsUri + id);
+                if (contact == null)
+                {
+                    return NotFound();
+                }
+                return View(contact);
+            } else
             {
-                return NotFound();
+                return RedirectToAccessDenied();
             }
-
-            return View(contact);
         }
 
         // POST: Contacts/Delete/5
@@ -138,19 +183,46 @@ namespace PhoneBook.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var contact = await _context.Contact.FindAsync(id);
-            if (contact != null)
+            if (HttpContext.Session.IsAdminUser())
             {
-                _context.Contact.Remove(contact);
+                using HttpClient client = _httpClientFactory.CreateClient();
+                AddAuthenticationHeader(client);
+                var response = await client.DeleteAsync(Constants.ContactsUri + $"Delete/{id}");
+                if (response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction(nameof(Index));
+                } else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                {
+                    return RedirectToLogin();
+                } else if (response.StatusCode == System.Net.HttpStatusCode.Forbidden)
+                {
+                    return RedirectToAccessDenied();
+                } else
+                {
+                    return NotFound();
+                }
+            } else
+            {
+                return RedirectToAccessDenied();
             }
-
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
         }
 
-        private bool ContactExists(int id)
+
+        private RedirectToPageResult RedirectToLogin()
         {
-            return _context.Contact.Any(e => e.Id == id);
+            HttpContext.Session.Clear();
+            return RedirectToPage("/Account/Login", new { area = "Identity" });
+        }
+
+        private RedirectToPageResult RedirectToAccessDenied()
+        {
+            return RedirectToPage("/Account/AccessDenied", new { area = "Identity" });
+        }
+
+        private void AddAuthenticationHeader(HttpClient client)
+        {
+            client.DefaultRequestHeaders.Authorization
+                = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString(Constants.TokenName));
         }
     }
 }
